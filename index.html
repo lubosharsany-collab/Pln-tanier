@@ -2,56 +2,70 @@
 <html lang="sk">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Plný tanier v2</title>
-<meta name="theme-color" content="#5b743b">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Plný tanier 3.0</title>
+<meta name="theme-color" content="#3f5f32">
 <link rel="manifest" href="manifest.webmanifest">
 <style>
-:root{--bg:#f7f1e7;--card:#fffaf2;--ink:#2b241d;--muted:#77695d;--green:#5b743b;--green2:#e1edcf;--orange:#de8b32;--line:#eadfcd;--shadow:0 18px 48px rgba(56,40,20,.14);--r:26px}
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:radial-gradient(circle at 0 0,#fff0bd,transparent 28%),radial-gradient(circle at 100% 10%,#dcefc5,transparent 28%),var(--bg);color:var(--ink)}
-.app{max-width:560px;margin:auto;min-height:100svh;padding:14px 14px 94px}.top{display:flex;align-items:center;justify-content:space-between;padding:12px 2px}.brand{display:flex;gap:11px;align-items:center}.logo{width:50px;height:50px;border-radius:18px;background:linear-gradient(135deg,#f1d47e,#b98245);display:grid;place-items:center;font-size:30px;box-shadow:var(--shadow)}
-h1{font-size:25px;margin:0}.sub{font-size:13px;color:var(--muted)}button{font:inherit}.iconbtn{border:0;background:var(--card);color:var(--ink);border-radius:16px;padding:12px;box-shadow:var(--shadow);font-size:18px}
-.hero{background:linear-gradient(135deg,var(--green),#819d43);color:white;border-radius:34px;padding:24px;margin:8px 0 16px;box-shadow:var(--shadow);position:relative;overflow:hidden}.hero:after{content:"🍽️";position:absolute;right:-15px;bottom:-30px;font-size:132px;opacity:.16}.hero h2{margin:0 0 8px;font-size:31px}.hero p{margin:0;opacity:.94}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:18px}.stat{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.22);border-radius:19px;padding:12px}.stat b{display:block;font-size:18px}.stat span{font-size:12px}
-.search,.input,textarea,select{width:100%;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:18px;padding:13px;font:inherit;margin-bottom:10px}textarea{min-height:92px}
-.tabs{display:flex;gap:8px;overflow:auto;padding:2px 0 14px}.tab{white-space:nowrap;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:10px 13px;border-radius:999px;font-weight:800}.tab.active{background:var(--green);color:white;border-color:var(--green)}
-.sectionTitle{display:flex;align-items:center;justify-content:space-between;margin:18px 2px 10px}.sectionTitle h2{margin:0;font-size:24px}
-.grid{display:grid;gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}.foodpic{height:116px;background:linear-gradient(135deg,#f7d77f,#e9f1d7);display:flex;align-items:center;justify-content:center;font-size:60px}
-.content{padding:16px}.content h3{font-size:21px;margin:0 0 7px}.meta{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 12px}.pill{font-size:12px;border-radius:999px;padding:5px 8px;background:var(--green2);color:var(--green);font-weight:900}.pill.hot{background:#fff0d8;color:#8b5412}.pill.fav{background:#ffe2db;color:#9c3f31}.small{font-size:13px;color:var(--muted)}
-.actions{display:flex;gap:8px;margin-top:14px}.btn{border:0;background:var(--green);color:white;border-radius:16px;padding:12px;font-weight:900;flex:1}.btn.secondary{background:transparent;color:var(--green);border:1px solid var(--line)}.bigButton{border:0;border-radius:25px;padding:18px;background:linear-gradient(135deg,var(--orange),#b25b2e);color:white;box-shadow:var(--shadow);font-size:18px;font-weight:950;width:100%;margin:10px 0}
-.nav{position:fixed;left:50%;bottom:10px;transform:translateX(-50%);width:min(560px,calc(100% - 20px));background:rgba(255,250,242,.92);backdrop-filter:blur(18px);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:26px;display:grid;grid-template-columns:repeat(5,1fr);padding:8px;z-index:5}
-.nav button{border:0;background:transparent;color:var(--muted);padding:8px 2px;border-radius:17px;font-weight:900;font-size:11px}.nav button b{display:block;font-size:21px}.nav button.active{background:var(--green2);color:var(--green)}.screen{display:none}.screen.active{display:block}.empty{text-align:center;color:var(--muted);padding:28px;background:var(--card);border-radius:var(--r)}
-.shopItem{display:flex;align-items:center;gap:10px;padding:12px 14px}.shopItem input{width:22px;height:22px}.shopItem.done span{text-decoration:line-through;color:var(--muted)}.foodInfo{display:grid;grid-template-columns:1fr 1fr;gap:10px}.foodInfo .card{padding:14px}.foodInfo b{font-size:20px}
-.detail{position:fixed;inset:0;background:var(--bg);z-index:20;overflow:auto;padding:14px;display:none}.detail.show{display:block}.close{position:sticky;top:8px;margin-left:auto;display:block;width:46px;height:46px;border-radius:18px;border:0;background:var(--card);box-shadow:var(--shadow);font-size:24px;z-index:30}.detailPic{height:190px;background:linear-gradient(135deg,#f7d77f,#e9f1d7);display:flex;align-items:center;justify-content:center;font-size:88px;border-radius:28px 28px 0 0}
-canvas{width:100%;height:170px;background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);border:1px solid var(--line);margin-top:12px}
-.version{font-size:11px;color:var(--muted);text-align:center;margin-top:18px}
+:root{
+  --bg:#f5efe4;--card:#fffaf0;--ink:#271f18;--muted:#75685b;--green:#3f5f32;--green2:#dfeacd;
+  --cream:#fff7e6;--amber:#d88930;--potato:#f0cf7a;--red:#b45443;--line:#eadfcd;
+  --shadow:0 18px 48px rgba(48,34,16,.16);--r:28px
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:
+radial-gradient(circle at 0 0,#fff0bd,transparent 28%),
+radial-gradient(circle at 100% 8%,#cfe8b7,transparent 28%),var(--bg);color:var(--ink)}
+.app{max-width:620px;margin:0 auto;min-height:100svh;padding:14px 14px 98px}
+.top{display:flex;align-items:center;justify-content:space-between;padding:10px 2px 12px}
+.brand{display:flex;gap:12px;align-items:center}.mark{width:56px;height:56px;border-radius:22px;background:linear-gradient(145deg,#3f5f32,#7b9946);box-shadow:var(--shadow);position:relative;display:grid;place-items:center}
+.mark:before{content:"";width:30px;height:30px;border-radius:50%;background:var(--potato);box-shadow:12px 8px 0 -5px #ffe5a2;display:block}.mark:after{content:"";position:absolute;width:18px;height:9px;border-radius:18px 18px 0 0;border:4px solid #fff7db;border-bottom:0;bottom:12px}
+h1{font-size:26px;margin:0;letter-spacing:-.8px}.sub{font-size:13px;color:var(--muted);margin-top:2px}
+.iconbtn{border:0;background:rgba(255,250,240,.8);color:var(--ink);border-radius:18px;padding:12px;box-shadow:var(--shadow);font-size:18px}
+.hero{border-radius:34px;padding:24px;box-shadow:var(--shadow);background:linear-gradient(135deg,#3f5f32,#789645);color:white;overflow:hidden;position:relative;margin-bottom:18px}
+.hero:after{content:"";position:absolute;right:-35px;bottom:-45px;width:170px;height:170px;border-radius:50%;background:rgba(255,255,255,.12)}
+.hero h2{margin:0 0 8px;font-size:32px;letter-spacing:-1px}.hero p{margin:0;opacity:.95;max-width:350px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px;position:relative;z-index:1}.stat{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.22);border-radius:20px;padding:12px}.stat b{display:block;font-size:20px}.stat span{font-size:12px;opacity:.9}
+.quick{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}.quick button{border:0;border-radius:24px;padding:18px;text-align:left;font-weight:900;color:white;box-shadow:var(--shadow);font-size:16px}.q1{background:linear-gradient(135deg,#d88930,#b8622b)}.q2{background:linear-gradient(135deg,#5b7b3f,#89aa54)}.q3{background:linear-gradient(135deg,#6e523b,#9b7753)}.q4{background:linear-gradient(135deg,#934e43,#c56c57)}
+.sectionTitle{display:flex;align-items:center;justify-content:space-between;margin:20px 2px 10px}.sectionTitle h2{margin:0;font-size:24px;letter-spacing:-.5px}
+.search,.input,textarea,select{width:100%;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:18px;padding:13px;font:inherit;margin-bottom:10px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.4)}textarea{min-height:96px}
+.tabs{display:flex;gap:8px;overflow:auto;padding:2px 0 14px;scrollbar-width:none}.tab{white-space:nowrap;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:10px 14px;border-radius:999px;font-weight:850}.tab.active{background:var(--green);color:white;border-color:var(--green)}
+.grid{display:grid;gap:14px}.card{background:rgba(255,250,240,.92);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}.photo{height:130px;background:linear-gradient(135deg,#f6cf79,#e9f1d7);display:flex;align-items:center;justify-content:center;font-size:64px;position:relative}.photo .badge{position:absolute;left:12px;top:12px;background:rgba(255,255,255,.88);border-radius:999px;padding:7px 10px;font-size:12px;font-weight:900;color:var(--green)}
+.content{padding:16px}.content h3{font-size:21px;margin:0 0 7px;letter-spacing:-.4px}.small{font-size:13px;color:var(--muted)}
+.meta{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 12px}.pill{font-size:12px;border-radius:999px;padding:6px 9px;background:var(--green2);color:var(--green);font-weight:900}.pill.hot{background:#fff0d8;color:#8b5412}.pill.fav{background:#ffe2db;color:#9c3f31}
+.actions{display:flex;gap:8px;margin-top:14px}.btn{border:0;background:var(--green);color:white;border-radius:16px;padding:12px;font-weight:900;flex:1}.btn.secondary{background:transparent;color:var(--green);border:1px solid var(--line)}.big{border:0;border-radius:25px;padding:18px;background:linear-gradient(135deg,var(--amber),#b25b2e);color:white;box-shadow:var(--shadow);font-size:18px;font-weight:950;width:100%;margin:10px 0}
+.nav{position:fixed;left:50%;bottom:10px;transform:translateX(-50%);width:min(620px,calc(100% - 20px));background:rgba(255,250,242,.92);backdrop-filter:blur(18px);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:28px;display:grid;grid-template-columns:repeat(5,1fr);padding:8px;z-index:10}
+.nav button{border:0;background:transparent;color:var(--muted);padding:8px 2px;border-radius:18px;font-weight:900;font-size:11px}.nav button b{display:block;font-size:22px}.nav button.active{background:var(--green2);color:var(--green)}
+.screen{display:none}.screen.active{display:block}.empty{text-align:center;color:var(--muted);padding:28px;background:var(--card);border-radius:var(--r)}
+.detail{position:fixed;inset:0;background:var(--bg);z-index:30;overflow:auto;padding:14px;display:none}.detail.show{display:block}.close{position:sticky;top:8px;margin-left:auto;display:block;width:48px;height:48px;border-radius:18px;border:0;background:var(--card);box-shadow:var(--shadow);font-size:24px;z-index:31}.detailPic{height:220px;background:linear-gradient(135deg,#f6cf79,#e9f1d7);display:flex;align-items:center;justify-content:center;font-size:96px;border-radius:30px 30px 0 0}
+.shopItem{display:flex;align-items:center;gap:10px;padding:13px 14px}.shopItem input{width:22px;height:22px}.shopItem.done span{text-decoration:line-through;color:var(--muted)}
+.foodInfo{display:grid;grid-template-columns:1fr 1fr;gap:10px}.foodInfo .card{padding:14px}.foodInfo b{font-size:20px}
+.plateGrid{display:grid;grid-template-columns:1fr 90px;gap:8px}.calcResult{font-size:22px;font-weight:950}.version{text-align:center;color:var(--muted);font-size:11px;margin-top:18px}
 </style>
 </head>
 <body>
 <div class="app">
- <div class="top"><div class="brand"><div class="logo">🍽️</div><div><h1>Plný tanier</h1><div class="sub">v2.0 opravená verzia</div></div></div><button class="iconbtn" onclick="hardRefresh()">↻</button></div>
+ <div class="top"><div class="brand"><div class="mark"></div><div><h1>Plný tanier</h1><div class="sub">verzia 3.0 · šéfkuchársky režim</div></div></div><button class="iconbtn" onclick="hardRefresh()">↻</button></div>
 
  <section id="home" class="screen active">
-  <div class="hero"><h2>Ahoj Ľuboš 👋</h2><p>Veľký objem, rozumné kalórie, menej nočných kaiseriek.</p><div class="stats"><div class="stat"><b id="recipeCount">0</b><span>receptov</span></div><div class="stat"><b id="lastWeight">—</b><span>posl. váha</span></div><div class="stat"><b>85</b><span>cieľ kg</span></div></div></div>
-  <button class="bigButton" onclick="randomRecipe()">🎲 Čo dnes variť?</button><div id="todayPick"></div>
-  <div class="sectionTitle"><h2>⭐ Obľúbené</h2></div><div class="grid" id="favList"></div><div class="version">Plný tanier v2.0</div>
+  <div class="hero"><h2>Dobré jedlo bez hladu</h2><p>Normálne slovenské jedlá, veľký objem a rozumné kalórie.</p><div class="stats"><div class="stat"><b id="recipeCount">0</b><span>receptov</span></div><div class="stat"><b>85</b><span>cieľ kg</span></div><div class="stat"><b>🥔</b><span>hlavná zbraň</span></div></div></div>
+  <div class="quick"><button class="q1" onclick="randomRecipe()">🎲<br>Čo dnes variť?</button><button class="q2" onclick="go(3)">🌙<br>Nočný hlad</button><button class="q3" onclick="go(4)">🛒<br>Nákup</button><button class="q4" onclick="goPlate()">🥔<br>Môj tanier</button></div>
+  <div id="todayPick"></div><div class="sectionTitle"><h2>⭐ Obľúbené</h2></div><div class="grid" id="favList"></div><div class="version">Plný tanier v3.0</div>
  </section>
 
  <section id="recipesScreen" class="screen"><input class="search" id="q" placeholder="Hľadať: zemiaky, tvaroh, lusky..." oninput="renderRecipes()"><div class="tabs" id="tabs"></div><div class="grid" id="recipes"></div></section>
- <section id="addScreen" class="screen"><div class="sectionTitle"><h2>➕ Nový recept</h2></div><input class="input" id="name" placeholder="Názov"><input class="input" id="emoji" placeholder="Emoji napr. 🫛"><select id="cat"><option>Večera</option><option>Obed</option><option>Raňajky</option><option>Nočná rezerva</option><option>Dip</option><option>Víkend</option></select><input class="input" id="kcal" placeholder="Kcal napr. 650"><input class="input" id="protein" placeholder="Bielkoviny napr. 55 g"><textarea id="ingredients" placeholder="Suroviny – každá na nový riadok"></textarea><textarea id="steps" placeholder="Postup / poznámka"></textarea><button class="bigButton" onclick="addRecipe()">Uložiť recept</button></section>
- <section id="night" class="screen"><div class="sectionTitle"><h2>🌙 Nočný hlad</h2></div><div class="card"><div class="content"><h3>Pravidlo noci</h3><p class="small">Keď sa zobudíš, nejdeš po pečive. Vyber si pripravenú možnosť a zapíš ju.</p></div></div><div class="grid" id="nightOptions" style="margin-top:14px"></div></section>
+
+ <section id="addScreen" class="screen"><div class="sectionTitle"><h2>➕ Nový recept</h2></div><input class="input" id="name" placeholder="Názov"><input class="input" id="emoji" placeholder="Emoji napr. 🫛"><select id="cat"><option>Večera</option><option>Obed</option><option>Raňajky</option><option>Nočná rezerva</option><option>Dip</option><option>Víkend</option></select><input class="input" id="kcal" placeholder="Kcal napr. 650"><input class="input" id="protein" placeholder="Bielkoviny napr. 55 g"><textarea id="ingredients" placeholder="Suroviny – každá na nový riadok"></textarea><textarea id="steps" placeholder="Postup / poznámka"></textarea><button class="big" onclick="addRecipe()">Uložiť recept</button></section>
+
+ <section id="night" class="screen"><div class="sectionTitle"><h2>🌙 Nočný hlad</h2></div><div class="card"><div class="content"><h3>Pravidlo noci</h3><p class="small">Nezakazuješ si jesť. Len volíš lepšie: tvaroh, kefír, zvyšok večere alebo zemiaky.</p></div></div><div class="grid" id="nightOptions" style="margin-top:14px"></div></section>
+
  <section id="shop" class="screen"><div class="sectionTitle"><h2>🛒 Nákup</h2></div><div style="display:grid;grid-template-columns:1fr auto;gap:8px"><input class="input" id="shopInput" placeholder="Pridať: zemiaky, kefír..."><button class="btn" onclick="addShop()" style="margin-bottom:10px">+</button></div><div id="shopList" class="grid"></div><div class="sectionTitle"><h2>🥔 Top potraviny</h2></div><div class="foodInfo" id="foodInfo"></div></section>
+
+ <section id="plate" class="screen"><div class="sectionTitle"><h2>🥔 Môj tanier</h2></div><div class="card"><div class="content"><p class="small">Rýchly odhad pre tvoje najčastejšie jedlá.</p><div id="plateRows"></div><button class="big" onclick="calcPlate()">Vypočítať tanier</button><div id="plateResult" class="calcResult"></div></div></div></section>
 </div>
 
 <div id="detail" class="detail"></div>
-
-<nav class="nav">
- <button class="active" onclick="showScreen('home',this)"><b>🏠</b>Domov</button>
- <button onclick="showScreen('recipesScreen',this)"><b>🍽️</b>Recepty</button>
- <button onclick="showScreen('addScreen',this)"><b>➕</b>Pridať</button>
- <button onclick="showScreen('night',this)"><b>🌙</b>Noc</button>
- <button onclick="showScreen('shop',this)"><b>🛒</b>Nákup</button>
-</nav>
+<nav class="nav"><button class="active" onclick="showScreen('home',this)"><b>🏠</b>Domov</button><button onclick="showScreen('recipesScreen',this)"><b>🍽️</b>Recepty</button><button onclick="showScreen('addScreen',this)"><b>➕</b>Pridať</button><button onclick="showScreen('night',this)"><b>🌙</b>Noc</button><button onclick="showScreen('shop',this)"><b>🛒</b>Nákup</button></nav>
 
 <script>
 const starter=[
@@ -61,31 +75,33 @@ const starter=[
 {id:4,n:"Tvarohový cesnakový dip",e:"🥣",c:"Dip",k:"250–300",p:"30 g",fav:false,i:["250 g tvarohu","1–2 PL kefíru","cesnak","pažítka/kôpor","soľ, korenie"],s:"Vymiešať na hustý dip. Namiesto omáčky."},
 {id:5,n:"Tekvicový prívarok",e:"🎃",c:"Víkend",k:"podľa porcie",p:"podľa prílohy",fav:false,i:["veľa tekvice","cibuľa","cesnak","kôpor","trochu mlieka/jogurtu","vajcia alebo kura"],s:"Hustiť zemiakom alebo trochou múky. Veľký objem."},
 {id:6,n:"Nočná rezerva",e:"🌙",c:"Nočná rezerva",k:"200–350",p:"podľa voľby",fav:true,i:["250 g tvarohu","400–500 ml kefíru","zvyšok večere","200–300 g zemiakov"],s:"Cieľ: žiadne tri kaiserky o druhej ráno."},
-{id:7,n:"3 vajcia + zemiaky",e:"🥚",c:"Obed",k:"400–500",p:"25 g",fav:true,i:["3 vajcia","200–250 g zemiakov","paradajky/uhorka/kapusta"],s:"Upgrade oproti vajcia + len zelenina."}
+{id:7,n:"3 vajcia + zemiaky",e:"🥚",c:"Obed",k:"400–500",p:"25 g",fav:true,i:["3 vajcia","200–250 g zemiakov","paradajky/uhorka/kapusta"],s:"Upgrade oproti vajcia + len zelenina."},
+{id:8,n:"Zemiaky + tvaroh",e:"🥔",c:"Večera",k:"550–700",p:"35–45 g",fav:false,i:["400–500 g zemiakov","250 g tvarohu","cesnak","kôpor/pažítka","kyslá kapusta"],s:"Jednoduché slovenské jedlo, len lepšie."}
 ];
 const foods=[["🥔 Zemiaky","77 kcal / 100 g","⭐⭐⭐⭐⭐ sýtosť"],["🫛 Lusky","30 kcal / 100 g","⭐⭐⭐⭐ objem"],["🥬 Kyslá kapusta","20 kcal / 100 g","⭐⭐⭐⭐ vláknina"],["🎃 Tekvica","25 kcal / 100 g","⭐⭐⭐⭐ prívarok"],["🥣 Tvaroh","253 kcal / 250 g","⭐⭐⭐⭐ bielkoviny"],["🥛 Kefír","cca 45 kcal / 100 g","⭐⭐⭐ nočná rezerva"]];
-let recipes=JSON.parse(localStorage.getItem("pt_recipes_v2")||"null")||starter;
-let shop=JSON.parse(localStorage.getItem("pt_shop_v2")||"null")||["zemiaky","tvaroh","kefír","kuracie prsia","lusky","kyslá kapusta"];
-let activeCat="Všetko";
-function save(){localStorage.setItem("pt_recipes_v2",JSON.stringify(recipes));localStorage.setItem("pt_shop_v2",JSON.stringify(shop))}
-function showScreen(id,btn){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));btn.classList.add("active");renderAll()}
+const plateFoods=[["Zemiaky",0.77,0.02],["Kuracie prsia",1.5,0.31],["Lusky",0.30,0.02],["Tvaroh",1.01,0.12],["Kefír",0.45,0.035],["Kapusta",0.20,0.01],["Vajcia",1.55,0.13]];
+let recipes=JSON.parse(localStorage.getItem("pt3_recipes")||"null")||starter;let shop=JSON.parse(localStorage.getItem("pt3_shop")||"null")||["zemiaky","tvaroh","kefír","kuracie prsia","lusky","kyslá kapusta"];let activeCat="Všetko";
+function save(){localStorage.setItem("pt3_recipes",JSON.stringify(recipes));localStorage.setItem("pt3_shop",JSON.stringify(shop))}
+function showScreen(id,btn){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));if(btn)btn.classList.add("active");renderAll()}
+function go(i){document.querySelectorAll(".nav button")[i].click()} function goPlate(){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById("plate").classList.add("active");document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"))}
 function cats(){return ["Všetko",...Array.from(new Set(recipes.map(r=>r.c)))]}
 function renderTabs(){document.getElementById("tabs").innerHTML=cats().map(c=>`<button class="tab ${activeCat===c?'active':''}" onclick="activeCat='${c}';renderRecipes()">${c}</button>`).join("")}
-function recipeCard(r){return `<article class="card"><div class="foodpic">${r.e}</div><div class="content"><h3>${r.n}</h3><div class="meta"><span class="pill hot">🔥 ${r.k}</span><span class="pill">💪 ${r.p}</span>${r.fav?'<span class="pill fav">❤️ top</span>':''}</div><p class="small">${r.s}</p><div class="actions"><button class="btn" onclick="openRecipe(${r.id})">Otvoriť</button><button class="btn secondary" onclick="toggleFav(${r.id})">${r.fav?'❤️':'♡'}</button></div></div></article>`}
+function recipeCard(r){return `<article class="card"><div class="photo"><span class="badge">${r.c}</span>${r.e}</div><div class="content"><h3>${r.n}</h3><div class="meta"><span class="pill hot">🔥 ${r.k}</span><span class="pill">💪 ${r.p}</span>${r.fav?'<span class="pill fav">❤️ top</span>':''}</div><p class="small">${r.s}</p><div class="actions"><button class="btn" onclick="openRecipe(${r.id})">Otvoriť</button><button class="btn secondary" onclick="toggleFav(${r.id})">${r.fav?'❤️':'♡'}</button></div></div></article>`}
 function renderRecipes(){renderTabs();let q=(document.getElementById("q")?.value||"").toLowerCase();let arr=recipes.filter(r=>(activeCat==="Všetko"||r.c===activeCat)&&JSON.stringify(r).toLowerCase().includes(q));document.getElementById("recipes").innerHTML=arr.map(recipeCard).join("")||'<div class="empty">Nič som nenašiel 😄</div>'}
-function renderHome(){document.getElementById("recipeCount").textContent=recipes.length;document.getElementById("lastWeight").textContent="—";document.getElementById("favList").innerHTML=recipes.filter(r=>r.fav).slice(0,4).map(recipeCard).join("")}
-function renderNight(){document.getElementById("nightOptions").innerHTML=recipes.filter(r=>r.c==="Nočná rezerva"||r.n.includes("Tvaroh")).map(recipeCard).join("")}
-function renderShop(){document.getElementById("shopList").innerHTML=shop.map((x,i)=>`<div class="card"><label class="shopItem"><input type="checkbox" onchange="this.parentElement.classList.toggle('done')"><span>${x}</span><button class="iconbtn" style="margin-left:auto" onclick="shop.splice(${i},1);save();renderShop()">×</button></label></div>`).join("");document.getElementById("foodInfo").innerHTML=foods.map(f=>`<div class="card"><b>${f[0]}</b><p class="small">${f[1]}<br>${f[2]}</p></div>`).join("")}
-function renderAll(){renderHome();renderRecipes();renderNight();renderShop()}
-function openRecipe(id){let r=recipes.find(x=>x.id===id);if(!r)return;document.getElementById("detail").innerHTML=`<button class="close" onclick="closeRecipe()">×</button><div class="card"><div class="detailPic">${r.e}</div><div class="content"><h2>${r.n}</h2><div class="meta"><span class="pill hot">🔥 ${r.k}</span><span class="pill">💪 ${r.p}</span><span class="pill">${r.c}</span>${r.fav?'<span class="pill fav">❤️ obľúbené</span>':''}</div><h3>Suroviny</h3><ul>${r.i.map(x=>`<li>${x}</li>`).join("")}</ul><h3>Postup</h3><p>${r.s}</p><button class="bigButton" onclick="toggleFav(${r.id});openRecipe(${r.id})">${r.fav?'❤️ Odobrať z obľúbených':'♡ Pridať medzi obľúbené'}</button></div></div>`;document.getElementById("detail").classList.add("show")}
-function closeRecipe(){document.getElementById("detail").classList.remove("show")}
+function renderHome(){recipeCount.textContent=recipes.length;favList.innerHTML=recipes.filter(r=>r.fav).slice(0,4).map(recipeCard).join("")}
+function renderNight(){nightOptions.innerHTML=recipes.filter(r=>r.c==="Nočná rezerva"||r.n.includes("Tvaroh")||r.n.includes("zemiaky")).map(recipeCard).join("")}
+function renderShop(){shopList.innerHTML=shop.map((x,i)=>`<div class="card"><label class="shopItem"><input type="checkbox" onchange="this.parentElement.classList.toggle('done')"><span>${x}</span><button class="iconbtn" style="margin-left:auto" onclick="shop.splice(${i},1);save();renderShop()">×</button></label></div>`).join("");foodInfo.innerHTML=foods.map(f=>`<div class="card"><b>${f[0]}</b><p class="small">${f[1]}<br>${f[2]}</p></div>`).join("")}
+function renderPlate(){plateRows.innerHTML=plateFoods.map((f,i)=>`<div class="plateGrid"><label>${f[0]}</label><input class="input" id="pf${i}" placeholder="g"></div>`).join("")}
+function renderAll(){renderHome();renderRecipes();renderNight();renderShop();if(!plateRows.innerHTML)renderPlate()}
+function openRecipe(id){let r=recipes.find(x=>x.id===id);if(!r)return;detail.innerHTML=`<button class="close" onclick="closeRecipe()">×</button><div class="card"><div class="detailPic">${r.e}</div><div class="content"><h2>${r.n}</h2><div class="meta"><span class="pill hot">🔥 ${r.k}</span><span class="pill">💪 ${r.p}</span><span class="pill">${r.c}</span>${r.fav?'<span class="pill fav">❤️ obľúbené</span>':''}</div><h3>Suroviny</h3><ul>${r.i.map(x=>`<li>${x}</li>`).join("")}</ul><h3>Postup</h3><p>${r.s}</p><button class="big" onclick="toggleFav(${r.id});openRecipe(${r.id})">${r.fav?'❤️ Odobrať z obľúbených':'♡ Pridať medzi obľúbené'}</button></div></div>`;detail.classList.add("show")}
+function closeRecipe(){detail.classList.remove("show")}
 function toggleFav(id){recipes=recipes.map(r=>r.id===id?{...r,fav:!r.fav}:r);save();renderAll()}
 function addRecipe(){let r={id:Date.now(),n:name.value||"Nový recept",e:emoji.value||"🍽️",c:cat.value,k:kcal.value||"?",p:protein.value||"?",fav:false,i:ingredients.value.split("\\n").filter(Boolean),s:steps.value||"Doplniť postup."};recipes.push(r);save();["name","emoji","kcal","protein","ingredients","steps"].forEach(id=>document.getElementById(id).value="");alert("Uložené 🍽️");renderAll()}
-function randomRecipe(){let r=recipes[Math.floor(Math.random()*recipes.length)];document.getElementById("todayPick").innerHTML=recipeCard(r)}
-function addShop(){let si=document.getElementById("shopInput");if(!si.value)return;shop.push(si.value);si.value="";save();renderShop()}
-function hardRefresh(){localStorage.removeItem("pt_recipes");localStorage.removeItem("pt_shop");alert("Cache starých receptov vyčistená. Obnov stránku, ak treba.");}
-renderAll();
-if("serviceWorker" in navigator){navigator.serviceWorker.register("./sw.js").then(reg=>reg.update())}
+function randomRecipe(){let r=recipes[Math.floor(Math.random()*recipes.length)];todayPick.innerHTML=recipeCard(r)}
+function addShop(){let si=shopInput;if(!si.value)return;shop.push(si.value);si.value="";save();renderShop()}
+function calcPlate(){let kcal=0,prot=0;plateFoods.forEach((f,i)=>{let g=parseFloat(document.getElementById("pf"+i).value||0);kcal+=g*f[1];prot+=g*f[2]});plateResult.innerHTML=`🔥 ${Math.round(kcal)} kcal<br>💪 ${Math.round(prot)} g bielkovín<br>😋 Sýtosť: ${kcal>500?'⭐⭐⭐⭐⭐':'⭐⭐⭐'}`}
+function hardRefresh(){localStorage.removeItem("pt_recipes");localStorage.removeItem("pt_shop");localStorage.removeItem("pt_recipes_v2");localStorage.removeItem("pt_shop_v2");alert("Staré dáta vyčistené.")}
+renderAll();if("serviceWorker" in navigator){navigator.serviceWorker.register("./sw.js").then(r=>r.update())}
 </script>
 </body>
 </html>
