@@ -51,14 +51,14 @@ html,body{margin:0;min-height:100%;font-family:Inter,system-ui,-apple-system,Seg
 <body>
 <div class="app">
   <div class="top">
-    <div class="brand"><div class="logo"><svg viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="23" stroke="#fff7e6" stroke-width="5"/><ellipse cx="31" cy="30" rx="12" ry="15" fill="#d8b77d"/><path d="M25 43c8 5 18 5 26 0" stroke="#fff7e6" stroke-width="4" stroke-linecap="round"/></svg></div><div><h1>Plný tanier</h1><p>Foundation · v6.0</p></div></div>
+    <div class="brand"><div class="logo"><svg viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="23" stroke="#fff7e6" stroke-width="5"/><ellipse cx="31" cy="30" rx="12" ry="15" fill="#d8b77d"/><path d="M25 43c8 5 18 5 26 0" stroke="#fff7e6" stroke-width="4" stroke-linecap="round"/></svg></div><div><h1>Plný tanier</h1><p>Foundation · v6.1</p></div></div>
     <button class="iconbtn" onclick="hardRefresh()">↻</button>
   </div>
 
   <section id="home" class="screen active">
     <div class="hero"><h2>Osobný kuchár bez hladovania.</h2><p>Sýte jedlá, veľký objem a jednoduchý systém, ktorý sa prispôsobuje tomu, čo naozaj ješ.</p><div class="stats"><div class="stat"><b id="recipeCount">0</b><span>receptov</span></div><div class="stat"><b>85</b><span>cieľ kg</span></div><div class="stat"><b id="favCount">0</b><span>obľúbených</span></div></div></div>
     <div class="quick"><button onclick="randomRecipe()">Čo dnes variť?<span class="k">Náhodný výber</span></button><button onclick="goPlate()">Môj tanier<span class="k">Kalkulačka porcie</span></button><button onclick="go(3)">Nočný hlad<span class="k">Rýchle riešenie</span></button><button onclick="go(4)">Nákup<span class="k">Zoznam surovín</span></button></div>
-    <div id="todayPick"></div><div class="title"><h2>Obľúbené</h2></div><div class="grid cards" id="favList"></div><div class="version">Plný tanier v6.0</div>
+    <div id="todayPick"></div><div class="title"><h2>Obľúbené</h2></div><div class="grid cards" id="favList"></div><div class="version">Plný tanier v6.1</div>
   </section>
 
   <section id="recipesScreen" class="screen"><input class="search" id="q" placeholder="Hľadať recept alebo surovinu..." oninput="renderRecipes()"><div class="tabs" id="tabs"></div><div class="grid cards" id="recipes"></div></section>
@@ -132,7 +132,20 @@ let plateFoods=[
 ];
 
 const STORE_RECIPES="pt6_recipes", STORE_SHOP="pt6_shop", STORE_PLATE="pt6_plate_foods";
-let recipes=mergeRecipes(JSON.parse(localStorage.getItem(STORE_RECIPES)||"null")||[]);
+function loadAnyOldRecipes(){
+  const keys=["pt6_recipes","pt51_recipes","pt5_recipes","pt4_recipes","pt3_recipes","pt_recipes_v2","pt_recipes"];
+  for(const k of keys){
+    try{
+      const raw=localStorage.getItem(k);
+      if(raw){
+        const arr=JSON.parse(raw);
+        if(Array.isArray(arr) && arr.length) return arr;
+      }
+    }catch(e){}
+  }
+  return [];
+}
+let recipes=mergeRecipes(loadAnyOldRecipes());
 let savedPF=JSON.parse(localStorage.getItem(STORE_PLATE)||"null"); if(savedPF) plateFoods=savedPF;
 let shop=JSON.parse(localStorage.getItem(STORE_SHOP)||"null")||["zemiaky","tvaroh","kefír","kuracie prsia","lusky","kyslá kapusta","bataty"];
 let activeCat="Všetko";
@@ -156,7 +169,7 @@ function goPlate(){document.querySelectorAll(".screen").forEach(s=>s.classList.r
 function cats(){return ["Všetko",...Array.from(new Set(recipes.map(r=>r.c)))]}
 function renderTabs(){tabs.innerHTML=cats().map(c=>`<button class="tab ${activeCat===c?'active':''}" onclick="activeCat='${c}';renderRecipes()">${c}</button>`).join("")}
 function recipeCard(r){return `<article class="card"><div class="photo"><span class="badge">${r.c}</span>${imgOrIcon(r)}</div><div class="content"><h3>${r.n}</h3><div class="meta"><span class="pill hot">${r.k}</span><span class="pill good">${r.p}</span>${r.fav?'<span class="pill">Obľúbené</span>':''}</div><p class="small">${r.s}</p><div class="actions"><button class="btn" onclick="openRecipe('${r.id}')">Otvoriť</button><button class="btn secondary" onclick="toggleFav('${r.id}')">${r.fav?'Uložené':'Uložiť'}</button></div></div></article>`}
-function renderRecipes(){renderTabs();let qq=(q?.value||"").toLowerCase();let arr=recipes.filter(r=>(activeCat==="Všetko"||r.c===activeCat)&&JSON.stringify(r).toLowerCase().includes(qq));recipesEl.innerHTML=arr.map(recipeCard).join("")||'<div class="empty">Nič som nenašiel.</div>'}
+function renderRecipes(){renderTabs();let qq=(q?.value||"").toLowerCase();let arr=recipes.filter(r=>(activeCat==="Všetko"||r.c===activeCat)&&JSON.stringify(r).toLowerCase().includes(qq));document.getElementById('recipes').innerHTML=arr.map(recipeCard).join("")||'<div class="empty">Nič som nenašiel.</div>'}
 function renderHome(){recipeCount.textContent=recipes.length;favCount.textContent=recipes.filter(r=>r.fav).length;favList.innerHTML=recipes.filter(r=>r.fav).slice(0,6).map(recipeCard).join("")||'<div class="empty">Zatiaľ žiadne obľúbené.</div>'}
 function renderNight(){nightOptions.innerHTML=recipes.filter(r=>r.c==="Nočná rezerva"||norm(r.n).includes("tvaroh")||norm(r.n).includes("zemiaky")).map(recipeCard).join("")}
 function renderShop(){shopList.innerHTML=shop.map((x,i)=>`<div class="card"><label class="shopItem"><input type="checkbox" onchange="this.parentElement.classList.toggle('done')"><span>${x}</span><button class="iconbtn" style="margin-left:auto" onclick="shop.splice(${i},1);save();renderShop()">×</button></label></div>`).join("");foodInfo.innerHTML=foodDb.slice(0,10).map(f=>`<div class="card"><b>${f.name}</b><p class="small">${f.k} kcal / 100 g<br>${f.p} g bielkovín</p></div>`).join("")}
