@@ -1,10 +1,10 @@
 {
-  "name": "ZEMIAK - Ľubošova kuchárka",
-  "short_name": "ZEMIAK",
+  "name": "Plný tanier",
+  "short_name": "Plný tanier",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f7f1e7",
-  "theme_color": "#58733a",
+  "theme_color": "#5b743b",
   "icons": [
     {
       "src": "icon.svg",
