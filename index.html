@@ -51,12 +51,12 @@ button{cursor:pointer}
 @media(min-width:640px){.recipe-grid{grid-template-columns:1fr 1fr}.quick-grid{grid-template-columns:repeat(4,1fr)}}
 </style></head>
 <body><div class="app">
-<header class="topbar"><div class="brand"><div class="brand-logo"><svg viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="23" stroke="#fff7e6" stroke-width="5"/><ellipse cx="31" cy="30" rx="12" ry="15" fill="#d6b47b"/><path d="M25 43c8 5 18 5 26 0" stroke="#fff7e6" stroke-width="4" stroke-linecap="round"/></svg></div><div><h1>Plný tanier</h1><p>Osobný kuchár · v7.5</p></div></div><button class="icon-btn" onclick="exportData()" title="Zálohovať">⇩</button></header>
+<header class="topbar"><div class="brand"><div class="brand-logo"><svg viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="23" stroke="#fff7e6" stroke-width="5"/><ellipse cx="31" cy="30" rx="12" ry="15" fill="#d6b47b"/><path d="M25 43c8 5 18 5 26 0" stroke="#fff7e6" stroke-width="4" stroke-linecap="round"/></svg></div><div><h1>Plný tanier</h1><p>Osobný kuchár · v7.7</p></div></div><button class="icon-btn" onclick="exportData()" title="Zálohovať">⇩</button></header>
 
 <section id="homeScreen" class="screen active">
 <div class="hero"><h2>Jedz normálne. Len múdrejšie.</h2><p>Sýte recepty, rýchla kalkulačka taniera a odporúčania podľa toho, čo máš doma.</p><div class="metrics"><div class="metric"><b id="recipeCount">0</b><span>receptov</span></div><div class="metric"><b id="favCount">0</b><span>obľúbených</span></div><div class="metric"><b id="historyCount">0</b><span>uložených tanierov</span></div></div></div>
 <div class="quick-grid"><button class="quick-card" onclick="randomRecipe()">Čo dnes variť?<small>Náhodný výber</small></button><button class="quick-card" onclick="openSpecial('plateScreen')">Môj tanier<small>Makrá a sýtosť</small></button><button class="quick-card" onclick="openSpecial('chefScreen')">Kuchár radí<small>Podľa surovín</small></button><button class="quick-card" onclick="openSpecial('plannerScreen')">Týždeň<small>Plán jedál</small></button><button class="quick-card" onclick="openDiaryToday()">Denník<small>Kalórie za deň</small></button></div>
-<div id="todayPick"></div><div class="section-head"><h2>Obľúbené ⭐</h2><button onclick="showScreen('recipesScreen',document.querySelectorAll('.nav button')[1])">Všetky</button></div><div class="recipe-grid" id="favList"></div><div class="version">Plný tanier v7.5 · regresný checklist zapnutý</div>
+<div id="todayPick"></div><div class="section-head"><h2>Obľúbené ⭐</h2><button onclick="showScreen('recipesScreen',document.querySelectorAll('.nav button')[1])">Všetky</button></div><div class="recipe-grid" id="favList"></div><div class="version">Plný tanier v7.7 · profilové obrázky receptov</div>
 </section>
 
 <section id="recipesScreen" class="screen"><input class="input" id="recipeSearch" placeholder="Hľadať recept alebo surovinu..." oninput="renderRecipes()"><div class="tabs" id="tabs"></div><div class="recipe-grid" id="recipesGrid"></div></section>
@@ -101,7 +101,7 @@ button{cursor:pointer}
 <button onclick="showScreen('shoppingScreen',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h2l2 10h9l2-7H7"/><circle cx="10" cy="19" r="1"/><circle cx="17" cy="19" r="1"/></svg>Nákup</button>
 </nav>
 <script>const recipesEl=document.getElementById("recipesGrid");</script><script>
-const VERSION="7.6";
+const VERSION="7.7";
 const KEYS={
   recipes:"pt7_recipes",shop:"pt7_shop",plate:"pt7_plate",history:"pt7_history",
   planner:"pt7_planner",pantry:"pt7_pantry",shopDone:"pt7_shop_done",diary:"pt7_diary",diaryTarget:"pt7_diary_target"
@@ -226,7 +226,35 @@ function findFood(name){
     || null;
 }
 function toast(msg){toastEl.textContent=msg;toastEl.classList.add("show");setTimeout(()=>toastEl.classList.remove("show"),1700)}
-function imgOrMark(r){return r.image?`<img src="${r.image}" alt="">`:`<div class="recipe-mark">PT</div>`}
+function recipeEmoji(r){
+  const t=normalize(`${r.name} ${(r.ingredients||[]).join(" ")}`);
+  if(t.includes("tvaroh")&&t.includes("ovoc"))return "🥣🍓";
+  if(t.includes("kurac")&&t.includes("batat"))return "🍗🍠";
+  if(t.includes("kurac")&&t.includes("fazul"))return "🍗🥔";
+  if(t.includes("kurac"))return "🍗🥔";
+  if(t.includes("dip"))return "🥣🧄";
+  if(t.includes("vajc")&&t.includes("zemiak"))return "🍳🥔";
+  if(t.includes("tekvic"))return "🎃🥣";
+  if(t.includes("kapust")&&t.includes("nakyp"))return "🥬🥔";
+  if(t.includes("kapust")&&t.includes("pekac"))return "🥬🧀";
+  if(t.includes("kolac")||t.includes("cheesecake"))return "🥔🧀";
+  if(t.includes("fazul")||t.includes("lusk"))return "🫛🌿";
+  if(t.includes("zemiak")&&t.includes("tvaroh"))return "🥔🥣";
+  if(t.includes("panvic"))return "🍳🥔";
+  if(t.includes("noc"))return "🌙🥣";
+  if(t.includes("ranaj"))return "🥣🍎";
+  if(t.includes("obed"))return "🍽️🥗";
+  return "🍽️🥗";
+}
+function xmlSafe(v){return String(v||"").replace(/[&<>\"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&apos;"}[c]))}
+function autoRecipeImage(r){
+  const palettes=[['#e7efe4','#b8cfad'],['#fff0d7','#e5bd82'],['#f3e4df','#d5aaa0'],['#e1edf0','#9fc1c8'],['#eee7f3','#bda9ca']];
+  let hash=0;for(const c of String(r.id||r.name||''))hash=(hash*31+c.charCodeAt(0))>>>0;
+  const [a,b]=palettes[hash%palettes.length],name=xmlSafe(r.name),cat=xmlSafe(r.category),emoji=recipeEmoji(r);
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="800" height="480" viewBox="0 0 800 480"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient><filter id="s"><feDropShadow dx="0" dy="12" stdDeviation="14" flood-opacity=".18"/></filter></defs><rect width="800" height="480" rx="42" fill="url(#g)"/><circle cx="400" cy="215" r="145" fill="#fff" fill-opacity=".76" filter="url(#s)"/><text x="400" y="260" text-anchor="middle" font-size="112" font-family="Apple Color Emoji,Segoe UI Emoji,Noto Color Emoji,sans-serif">${emoji}</text><rect x="235" y="370" width="330" height="48" rx="24" fill="#fff" fill-opacity=".82"/><text x="400" y="401" text-anchor="middle" font-size="21" font-weight="700" fill="#35523c" font-family="Arial,sans-serif">${name}</text><text x="400" y="448" text-anchor="middle" font-size="17" fill="#4f6754" font-family="Arial,sans-serif">${cat}</text></svg>`;
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
+function imgOrMark(r){const src=r.image||autoRecipeImage(r);return `<img src="${src}" alt="${xmlSafe(r.name)}" loading="lazy">`}
 function showScreen(id,btn){
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
