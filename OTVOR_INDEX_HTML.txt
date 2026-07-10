@@ -1,1 +1,1 @@
-Rozbaľ ZIP a otvor súbor index.html. Fotografie sú vložené priamo v aplikácii.
+Rozbaľ ZIP a otvor súbor index.html. Fotografie sú vložené priamo v aplikácii; priečinok images netreba.
