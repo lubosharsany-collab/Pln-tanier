@@ -1,0 +1,9 @@
+{
+  "name": "Plný tanier 8.1",
+  "short_name": "Plný tanier",
+  "start_url": "./index.html?v=8.1",
+  "display": "standalone",
+  "background_color": "#f2eee7",
+  "theme_color": "#22352a",
+  "icons": [{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
