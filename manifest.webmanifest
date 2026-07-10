@@ -1,46 +1,16 @@
-<!doctype html>
-<html lang="sk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Plný tanier 7.0</title><meta name="theme-color" content="#22352a"><link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="styles.css"></head>
-<body><div class="app">
-<header class="topbar"><div class="brand"><div class="brand-logo"><svg viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="23" stroke="#fff7e6" stroke-width="5"/><ellipse cx="31" cy="30" rx="12" ry="15" fill="#d6b47b"/><path d="M25 43c8 5 18 5 26 0" stroke="#fff7e6" stroke-width="4" stroke-linecap="round"/></svg></div><div><h1>Plný tanier</h1><p>Osobný kuchár · v7.0</p></div></div><button class="icon-btn" onclick="exportData()" title="Zálohovať">⇩</button></header>
-
-<section id="homeScreen" class="screen active">
-<div class="hero"><h2>Jedz normálne. Len múdrejšie.</h2><p>Sýte recepty, rýchla kalkulačka taniera a odporúčania podľa toho, čo máš doma.</p><div class="metrics"><div class="metric"><b id="recipeCount">0</b><span>receptov</span></div><div class="metric"><b id="favCount">0</b><span>obľúbených</span></div><div class="metric"><b id="historyCount">0</b><span>uložených tanierov</span></div></div></div>
-<div class="quick-grid"><button class="quick-card" onclick="randomRecipe()">Čo dnes variť?<small>Náhodný výber</small></button><button class="quick-card" onclick="openSpecial('plateScreen')">Môj tanier<small>Makrá a sýtosť</small></button><button class="quick-card" onclick="openSpecial('chefScreen')">Kuchár radí<small>Podľa surovín</small></button><button class="quick-card" onclick="openSpecial('plannerScreen')">Týždeň<small>Plán jedál</small></button></div>
-<div id="todayPick"></div><div class="section-head"><h2>Obľúbené</h2><button onclick="showScreen('recipesScreen',document.querySelectorAll('.nav button')[1])">Všetky</button></div><div class="recipe-grid" id="favList"></div><div class="version">Plný tanier v7.0 · regresný checklist zapnutý</div>
-</section>
-
-<section id="recipesScreen" class="screen"><input class="input" id="recipeSearch" placeholder="Hľadať recept alebo surovinu..." oninput="renderRecipes()"><div class="tabs" id="tabs"></div><div class="recipe-grid" id="recipesGrid"></div></section>
-
-<section id="addScreen" class="screen"><div class="section-head"><h2>Nový recept</h2></div>
-<input class="input" id="newRecipeName" placeholder="Názov"><input class="input" id="newRecipePhoto" type="file" accept="image/*">
-<div class="inline-2"><select id="newRecipeCategory"><option>Večera</option><option>Obed</option><option>Raňajky</option><option>Nočný hlad</option><option>Dip</option><option>Víkend</option></select><input class="input" id="newRecipeTime" type="number" placeholder="Čas v minútach"></div>
-<div class="inline-2"><input class="input" id="newRecipeKcal" type="number" placeholder="Kalórie"><input class="input" id="newRecipeProtein" type="number" placeholder="Bielkoviny"></div>
-<div class="inline-2"><input class="input" id="newRecipeServings" type="number" value="1" placeholder="Porcie"><input class="input" id="newRecipeSatiety" type="number" value="80" placeholder="Sýtosť 0–100"></div>
-<input class="input" id="newRecipeDesc" placeholder="Krátky popis"><textarea id="newRecipeIngredients" placeholder="Suroviny – každá na nový riadok"></textarea><textarea id="newRecipeSteps" placeholder="Postup"></textarea><button class="btn full" onclick="addRecipe()">Uložiť recept</button></section>
-
-<section id="plateScreen" class="screen"><div class="section-head"><h2>Môj tanier</h2><button onclick="clearPlate()">Vyčistiť</button></div>
-<div class="plate-summary"><div class="plate-total" id="plateTotal">0 kcal</div><div class="muted" id="plateSatiety">Index sýtosti: 0/100</div><div class="actions"><button class="btn secondary" onclick="savePlateHistory()">Uložiť tanier</button></div></div>
-<div class="card"><div class="card-body"><h3>Pridať potravinu</h3><input class="input" id="foodName" list="foodSuggestions" placeholder="Začni písať, napr. maliny" oninput="autofillFood()"><datalist id="foodSuggestions"></datalist>
-<div class="inline-2"><input class="input" id="foodKcal" type="number" placeholder="kcal / 100 g"><input class="input" id="foodProtein" type="number" placeholder="bielkoviny / 100 g"></div>
-<div class="inline-2"><input class="input" id="foodCarbs" type="number" placeholder="sacharidy"><input class="input" id="foodFat" type="number" placeholder="tuky"></div><input class="input" id="foodFiber" type="number" placeholder="vláknina"><div class="muted" id="foodHint">Známe hodnoty sa doplnia automaticky.</div><button class="btn full" onclick="addCustomFood()">Pridať do taniera</button></div></div>
-<div style="margin-top:14px" id="plateRows"></div><div class="section-head"><h2>História tanierov</h2></div><div class="grid" id="historyList"></div></section>
-
-<section id="shoppingScreen" class="screen"><div class="section-head"><h2>Nákup</h2></div><div class="inline"><input class="input" id="shopInput" placeholder="Pridať surovinu"><button class="btn compact" onclick="addShop()">Pridať</button></div><div class="grid" id="shoppingList"></div>
-<div class="section-head"><h2>Prehľad potravín</h2></div><div class="food-cards" id="foodCards"></div>
-<div class="section-head"><h2>Záloha dát</h2></div><div class="card"><div class="card-body"><button class="btn full" onclick="exportData()">Stiahnuť zálohu</button><input class="input" id="backupInput" type="file" accept="application/json"><button class="btn secondary full" onclick="importData()">Obnoviť zo zálohy</button></div></div></section>
-
-<section id="chefScreen" class="screen"><div class="section-head"><h2>Kuchár radí</h2></div><div class="card"><div class="card-body"><input class="input" id="pantryInput" placeholder="Čo máš doma? napr. kuracie, bataty, tvaroh"><div class="inline-2"><input class="input" id="chefMaxKcal" type="number" placeholder="Max. kcal"><input class="input" id="chefMinProtein" type="number" placeholder="Min. bielkovín"></div><button class="btn full" onclick="chefSuggest()">Navrhnúť recepty</button></div></div><div class="recipe-grid" style="margin-top:14px" id="chefResults"></div></section>
-
-<section id="plannerScreen" class="screen"><div class="section-head"><h2>Plán jedál</h2></div><div class="card"><div class="card-body" id="plannerRows"></div></div><button class="btn full" onclick="addPlannerToShop()">Pridať týždeň do nákupu</button></section>
-</div>
-
-<div id="detail" class="detail"></div><div id="toastEl" class="toast"></div>
-<nav class="nav">
-<button class="active" onclick="showScreen('homeScreen',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/></svg>Domov</button>
-<button onclick="showScreen('recipesScreen',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4h12v16H6z"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>Recepty</button>
-<button onclick="showScreen('addScreen',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Pridať</button>
-<button onclick="showScreen('plateScreen',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>Tanier</button>
-<button onclick="showScreen('shoppingScreen',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h2l2 10h9l2-7H7"/><circle cx="10" cy="19" r="1"/><circle cx="17" cy="19" r="1"/></svg>Nákup</button>
-</nav>
-<script>const recipesEl=document.getElementById("recipesGrid");</script><script src="app.js"></script></body></html>
+{
+  "name": "Plný tanier",
+  "short_name": "Plný tanier",
+  "start_url": "./index.html?v=7.1",
+  "display": "standalone",
+  "background_color": "#f2eee7",
+  "theme_color": "#22352a",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
