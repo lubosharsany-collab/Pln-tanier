@@ -1,1 +1,262 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#223127"/><circle cx="256" cy="230" r="148" fill="#fff7e6"/><circle cx="256" cy="230" r="100" fill="none" stroke="#d8b77d" stroke-width="28"/><ellipse cx="256" cy="224" rx="46" ry="58" fill="#d8b77d"/><path d="M170 335c58 38 114 38 172 0" fill="none" stroke="#fff7e6" stroke-width="26" stroke-linecap="round"/><text x="256" y="445" text-anchor="middle" font-size="42" fill="#fff7e6" font-family="Arial" font-weight="800">PLNÝ</text></svg>
+
+const VERSION="7.0";
+const KEYS={
+  recipes:"pt7_recipes",shop:"pt7_shop",plate:"pt7_plate",history:"pt7_history",
+  planner:"pt7_planner",pantry:"pt7_pantry"
+};
+
+const DEFAULT_RECIPES=[
+{id:"r_tvaroh",name:"Tvarohová klasika",category:"Raňajky",kcal:636,protein:54,time:5,servings:1,satiety:94,desc:"Husté raňajky s tvarohom, kefírom, vločkami a ovocím.",fav:true,ingredients:["250 g tvarohu","250 ml kefíru","30 g ovsených vločiek","15 g chia","10 g orechov","80 g ovocia"],steps:"Všetko premiešaj a nechaj pár minút postáť.",plate:[["tvaroh",250],["kefír",250],["ovsené vločky",30],["chia",15],["vlašské orechy",10],["maliny",80]]},
+{id:"r_kura_zemiaky",name:"Kura, zemiaky a kapusta",category:"Večera",kcal:652,protein:63,time:35,servings:1,satiety:97,desc:"Veľký tanier s vysokým obsahom bielkovín a veľmi dobrou sýtosťou.",fav:true,ingredients:["250 g kuracích pŕs","350 g zemiakov","200 g kyslej kapusty","korenie a cesnak"],steps:"Kura a zemiaky upeč. Kapustu podávaj bokom.",plate:[["kuracie prsia",250],["zemiaky",350],["kyslá kapusta",200]]},
+{id:"r_lusky",name:"Pečené lusky",category:"Večera",kcal:148,protein:8,time:25,servings:1,satiety:78,desc:"Celý plech zelených fazuliek ako objemná príloha alebo ľahká večera.",fav:true,ingredients:["450 g zelených fazuliek","cesnak","údená paprika","soľ a korenie","5 g oleja"],steps:"Peč 20–25 minút pri 200 °C. V polovici premiešaj.",plate:[["zelené fazuľky",450],["olej",5]]},
+{id:"r_dip",name:"Tvarohový cesnakový dip",category:"Dip",kcal:290,protein:31,time:5,servings:2,satiety:82,desc:"Hustý dip k zemiakom, mäsu alebo zelenine.",fav:false,ingredients:["250 g tvarohu","30 ml kefíru","cesnak","pažítka alebo kôpor"],steps:"Všetko vymiešaj dohladka.",plate:[["tvaroh",250],["kefír",30]]},
+{id:"r_noc",name:"Nočná rezerva",category:"Nočný hlad",kcal:265,protein:30,time:2,servings:1,satiety:86,desc:"Pripravená bezpečná voľba, keď sa zobudíš hladný.",fav:true,ingredients:["250 g tvarohu alebo 500 ml kefíru","prípadne 250 g zemiakov"],steps:"Vyber jednu pripravenú možnosť. Bez výčitiek a bez pečiva.",plate:[["tvaroh",250]]},
+{id:"r_vajcia",name:"Tri vajcia so zemiakmi",category:"Obed",kcal:478,protein:25,time:20,servings:1,satiety:91,desc:"Jednoduchý obed, ktorý zasýti viac než vajcia len so zeleninou.",fav:true,ingredients:["3 vajcia","250 g zemiakov","paradajky alebo uhorka"],steps:"Zemiaky uvar alebo upeč. Vajcia priprav podľa chuti.",plate:[["vajcia",150],["zemiaky",250],["paradajky",150]]},
+{id:"r_zemiaky_tvaroh",name:"Zemiaky s tvarohom",category:"Večera",kcal:632,protein:42,time:25,servings:1,satiety:96,desc:"Slovenská klasika upravená na sýte jedlo s vysokým obsahom bielkovín.",fav:false,ingredients:["450 g zemiakov","250 g tvarohu","cesnak","kôpor alebo pažítka","150 g kyslej kapusty"],steps:"Zemiaky uvar alebo upeč. Tvaroh ochuť cesnakom a bylinkami.",plate:[["zemiaky",450],["tvaroh",250],["kyslá kapusta",150]]},
+{id:"r_tekvica",name:"Tekvicový prívarok",category:"Víkend",kcal:420,protein:28,time:35,servings:2,satiety:88,desc:"Veľký objem, jemná chuť a pri správnej prílohe veľmi sýte jedlo.",fav:false,ingredients:["700 g tekvice","cibuľa","cesnak","kôpor","150 g bieleho jogurtu","2 vajcia"],steps:"Tekvicu podus, dochuť a zahusti malým zemiakom alebo trochou múky.",plate:[["tekvica",700],["biely jogurt",150],["vajcia",100]]},
+{id:"r_nakyp",name:"Kapustovo-zemiakový nákyp",category:"Víkend",kcal:385,protein:20,time:50,servings:3,satiety:90,desc:"Jednoduchý pekáč z dostupných surovín.",fav:false,ingredients:["350 g kyslej kapusty","400 g zemiakov","3 vajcia","40 g ovsených vločiek"],steps:"Všetko zmiešaj a peč 35–45 minút pri 190 °C.",plate:[["kyslá kapusta",350],["zemiaky",400],["vajcia",150],["ovsené vločky",40]]},
+{id:"r_kura_lusky",name:"Kuracie so zemiakmi a fazuľkami",category:"Večera",kcal:647,protein:58,time:35,servings:1,satiety:98,desc:"Overené Ľubošom: obrovský tanier, ktorý sa ledva dá dojesť.",fav:true,image:"assets/kuracie-zemiaky-fazulky.jpg",ingredients:["200 g kuracích pŕs","350 g zemiakov","220 g zelených fazuliek","paprika, cesnak, soľ, korenie","5 g oleja"],steps:"Všetko ochuť a upeč. Fazuľky pridaj podľa toho, ako chrumkavé ich chceš.",plate:[["kuracie prsia",200],["zemiaky",350],["zelené fazuľky",220],["olej",5]]},
+{id:"r_bataty",name:"Kuracie s batatmi",category:"Večera",kcal:655,protein:58,time:35,servings:1,satiety:92,desc:"Sladšia zmena oproti zemiakom, stále s vysokou sýtosťou.",fav:false,ingredients:["220 g kuracích pŕs","300 g batatov","200 g luskov","korenie a cesnak"],steps:"Batat nakrájaj, ochuť a upeč spolu s kuracím mäsom.",plate:[["kuracie prsia",220],["bataty",300],["zelené fazuľky",200]]},
+{id:"r_slany_tvaroh",name:"Slaný tvaroh so zemiakmi",category:"Večera",kcal:566,protein:39,time:20,servings:1,satiety:95,desc:"Rýchla bezmäsitá večera, keď nechceš variť kura.",fav:false,ingredients:["250 g tvarohu","400 g zemiakov","uhorka","cesnak","pažítka"],steps:"Tvaroh ochuť a podávaj s teplými alebo studenými zemiakmi.",plate:[["tvaroh",250],["zemiaky",400],["uhorka",150]]},
+{id:"r_dedinska_panvica",name:"Dedinská panvica",category:"Obed",kcal:540,protein:27,time:30,servings:1,satiety:93,desc:"Zemiaky, vajcia a kapusta z jednej panvice.",fav:false,ingredients:["350 g zemiakov","3 vajcia","200 g kapusty","cibuľa"],steps:"Zemiaky opeč, pridaj kapustu a nakoniec vajcia.",plate:[["zemiaky",350],["vajcia",150],["kapusta",200],["cibuľa",50]]},
+{id:"r_tvaroh_cheese",name:"Slaný zemiakovo-tvarohový koláč",category:"Víkend",kcal:410,protein:28,time:55,servings:4,satiety:89,desc:"Náš zemiakový cheesecake – slaný, jednoduchý a sýty.",fav:false,ingredients:["500 g zemiakov","500 g tvarohu","3 vajcia","cesnak","pažítka"],steps:"Rozmixuj, nalej do formy a peč približne 40 minút pri 185 °C.",plate:[["zemiaky",500],["tvaroh",500],["vajcia",150]]},
+{id:"r_kapustovy_pekac",name:"Kapustový pekáč s tvarohom",category:"Víkend",kcal:505,protein:42,time:45,servings:2,satiety:93,desc:"Kapustová verzia zapekaného jedla bez cestovín.",fav:false,ingredients:["500 g kyslej kapusty","3 vajcia","250 g tvarohu","rasca a cesnak"],steps:"Zmiešaj, vlož do pekáča a peč približne 35 minút.",plate:[["kyslá kapusta",500],["vajcia",150],["tvaroh",250]]}
+];
+
+const FOOD_DB=[
+["zemiaky",["zemiak","varené zemiaky","pečené zemiaky"],77,2,17,0.1,2.2],
+["bataty",["batat","sladké zemiaky","sweet potato"],86,1.6,20,0.1,3],
+["kuracie prsia",["kura","kuracie","kuracina","kuracie mäso"],150,31,0,3.5,0],
+["zelené fazuľky",["lusky","fazuľky","zelene fazulky"],30,2,5,0.2,3.4],
+["tvaroh",["jemný tvaroh","hrudkovitý tvaroh"],101,12,4,1.7,0],
+["kefír",["kefir"],45,3.5,4,1.1,0],
+["kyslá kapusta",["kysla kapusta"],20,1,4,0.1,2.9],
+["kapusta",["hlávková kapusta"],25,1.3,5.8,0.1,2.5],
+["vajcia",["vajce","vajíčka"],155,13,1,11,0],
+["maliny",["malina","mrazené maliny","čerstvé maliny"],52,1.2,12,0.7,6.5],
+["jahody",["jahoda"],32,0.7,7.7,0.3,2],
+["čučoriedky",["cucoriedky","čučoriedka"],57,0.7,14,0.3,2.4],
+["jablko",["jablká"],52,0.3,14,0.2,2.4],
+["banán",["banan"],89,1.1,23,0.3,2.6],
+["pomaranč",["pomaranc"],47,0.9,12,0.1,2.4],
+["mandarínky",["mandarinka"],53,0.8,13,0.3,1.8],
+["mango",[],60,0.8,15,0.4,1.6],
+["tekvica",["hokkaido","tekvica hokkaido"],25,1,6,0.1,0.5],
+["karfiol",[],25,1.9,5,0.3,2],
+["uhorka",["uhorky","šalátová uhorka"],15,0.7,3.6,0.1,0.5],
+["paradajky",["paradajka","rajčina"],18,0.9,3.9,0.2,1.2],
+["paprika",["červená paprika","zelená paprika"],31,1,6,0.3,2.1],
+["cibuľa",["cibula"],40,1.1,9.3,0.1,1.7],
+["cesnak",[],149,6.4,33,0.5,2.1],
+["šampiňóny",["sampinony","huby"],22,3.1,3.3,0.3,1],
+["cvikla",["červená repa"],43,1.6,10,0.2,2.8],
+["ryža varená",["varená ryža","ryza varena"],130,2.7,28,0.3,0.4],
+["ovsené vločky",["vločky","ovsene vlocky"],370,13,60,7,10],
+["chia",["chia semienka"],486,17,42,31,34],
+["vlašské orechy",["orechy"],654,15,14,65,6.7],
+["olej",["olivový olej","slnečnicový olej"],884,0,0,100,0],
+["biely jogurt",["jogurt","grécky jogurt"],60,5,4,3,0],
+["cottage",["cottage cheese"],98,12,3,4,0],
+["šunka",["sunka","kuracia šunka","morčacia šunka"],120,20,1,4,0],
+["hovädzie chudé",["hovadzie","hovädzie mäso"],180,27,0,8,0],
+["bravčové karé",["bravcove kare"],170,27,0,7,0],
+["šošovica varená",["sosovica"],116,9,20,0.4,7.9],
+["cícer varený",["cicer"],164,9,27,2.6,7.6],
+["fazuľa varená",["fazula"],127,8.7,23,0.5,6.4],
+["kukurica",[],86,3.2,19,1.2,2.7],
+["mrkva",[],41,0.9,10,0.2,2.8],
+["reďkovka",["redkovka"],16,0.7,3.4,0.1,1.6],
+["špenát",["spenat"],23,2.9,3.6,0.4,2.2],
+["brokolica",[],34,2.8,7,0.4,2.6],
+["cuketa",[],17,1.2,3.1,0.3,1],
+["mlieko polotučné",["mlieko"],47,3.4,4.8,1.5,0],
+["syr eidam 30%",["eidam","syr"],263,30,1,15,0]
+].map(x=>({name:x[0],aliases:x[1],k:x[2],p:x[3],c:x[4],f:x[5],fiber:x[6]}));
+
+
+
+function parse(key,fallback){try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}}
+function normalize(s){return (s||"").toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim()}
+function mergeRecipes(existing){
+  const map=new Map();
+  DEFAULT_RECIPES.forEach(r=>map.set(r.id,{...r}));
+  existing.forEach(r=>{
+    const match=[...map.values()].find(x=>x.id===r.id||normalize(x.name||x.n)===normalize(r.name||r.n));
+    const normalized={...r,name:r.name||r.n,category:r.category||r.c,kcal:Number(r.kcal)||parseInt(r.k)||0,protein:Number(r.protein)||parseInt(r.p)||0,ingredients:r.ingredients||r.i||[],steps:r.steps||r.s||"",image:r.image||r.img||null,time:r.time||20,servings:r.servings||1,satiety:r.satiety||85,desc:r.desc||r.s||""};
+    if(match) map.set(match.id,{...match,...normalized,id:match.id});
+    else map.set(normalized.id||"custom_"+Date.now()+"_"+Math.random(),normalized);
+  });
+  return [...map.values()];
+}
+function loadOldRecipes(){
+  const keys=["pt7_recipes","pt6_recipes","pt51_recipes","pt5_recipes","pt4_recipes","pt3_recipes","pt_recipes_v2","pt_recipes"];
+  let all=[];
+  keys.forEach(k=>{const a=parse(k,[]);if(Array.isArray(a))all.push(...a)});
+  return all;
+}
+let recipes=mergeRecipes(loadOldRecipes());
+let shop=parse(KEYS.shop,["zemiaky","tvaroh","kefír","kuracie prsia","lusky","kyslá kapusta","bataty"]);
+let plate=parse(KEYS.plate,[]);
+let history=parse(KEYS.history,[]);
+let planner=parse(KEYS.planner,{});
+let pantry=parse(KEYS.pantry,[]);
+let activeCategory="Všetko";
+
+function save(){
+  localStorage.setItem(KEYS.recipes,JSON.stringify(recipes));
+  localStorage.setItem(KEYS.shop,JSON.stringify(shop));
+  localStorage.setItem(KEYS.plate,JSON.stringify(plate));
+  localStorage.setItem(KEYS.history,JSON.stringify(history));
+  localStorage.setItem(KEYS.planner,JSON.stringify(planner));
+  localStorage.setItem(KEYS.pantry,JSON.stringify(pantry));
+}
+function foodTerms(f){return [f.name,...(f.aliases||[])].map(normalize)}
+function findFood(name){
+  const x=normalize(name); if(!x)return null;
+  return FOOD_DB.find(f=>foodTerms(f).some(a=>a===x))
+    || FOOD_DB.find(f=>foodTerms(f).some(a=>a.startsWith(x)||x.startsWith(a)))
+    || null;
+}
+function toast(msg){toastEl.textContent=msg;toastEl.classList.add("show");setTimeout(()=>toastEl.classList.remove("show"),1700)}
+function imgOrMark(r){return r.image?`<img src="${r.image}" alt="">`:`<div class="recipe-mark">PT</div>`}
+function showScreen(id,btn){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
+  if(btn)btn.classList.add("active");
+  renderAll();
+}
+function openSpecial(id){showScreen(id,null)}
+function categories(){return ["Všetko",...new Set(recipes.map(r=>r.category))]}
+function recipeCard(r){
+  return `<article class="card"><div class="recipe-photo"><span class="badge">${r.category}</span>${imgOrMark(r)}</div>
+  <div class="card-body"><h3>${r.name}</h3><p class="muted">${r.desc}</p>
+  <div class="pills"><span class="pill warm">${r.kcal} kcal</span><span class="pill">${r.protein} g bielkovín</span><span class="pill">${r.time} min</span></div>
+  <div class="actions"><button class="btn" onclick="openRecipe('${r.id}')">Otvoriť</button><button class="btn secondary" onclick="toggleFav('${r.id}')">${r.fav?"Uložené":"Uložiť"}</button></div></div></article>`;
+}
+function renderHome(){
+  recipeCount.textContent=recipes.length; favCount.textContent=recipes.filter(r=>r.fav).length; historyCount.textContent=history.length;
+  const fav=recipes.filter(r=>r.fav).slice(0,6);
+  favList.innerHTML=fav.length?fav.map(recipeCard).join(""):`<div class="empty">Zatiaľ žiadne obľúbené recepty.</div>`;
+}
+function renderRecipes(){
+  tabs.innerHTML=categories().map(c=>`<button class="tab ${activeCategory===c?"active":""}" onclick="activeCategory='${c}';renderRecipes()">${c}</button>`).join("");
+  const q=normalize(recipeSearch.value);
+  const list=recipes.filter(r=>(activeCategory==="Všetko"||r.category===activeCategory)&&normalize(JSON.stringify(r)).includes(q));
+  document.getElementById('recipesGrid').innerHTML=list.length?list.map(recipeCard).join(""):`<div class="empty">Nič som nenašiel.</div>`;
+}
+function openRecipe(id){
+  const r=recipes.find(x=>x.id===id); if(!r)return;
+  detail.innerHTML=`<button class="close" onclick="closeDetail()">×</button><div class="card">
+  <div class="detail-hero">${imgOrMark(r)}</div><div class="card-body"><h2>${r.name}</h2><p class="muted">${r.desc}</p>
+  <div class="pills"><span class="pill warm">${r.kcal} kcal</span><span class="pill">${r.protein} g bielkovín</span><span class="pill">${r.time} min</span><span class="pill">${r.servings} porcia</span><span class="pill">Sýtosť ${r.satiety}/100</span></div>
+  <h3>Suroviny</h3><ul>${r.ingredients.map(x=>`<li>${x}</li>`).join("")}</ul><h3>Postup</h3><p>${r.steps}</p>
+  <button class="btn full" onclick="addRecipeToPlate('${r.id}')">Pridať do Môjho taniera</button>
+  <button class="btn secondary full" onclick="addRecipeToShop('${r.id}')">Pridať suroviny do nákupu</button>
+  <button class="btn secondary full" onclick="toggleFav('${r.id}');openRecipe('${r.id}')">${r.fav?"Odobrať z obľúbených":"Pridať medzi obľúbené"}</button>
+  <details class="edit-panel"><summary>Upraviť recept</summary><div style="margin-top:12px">
+  <input class="input" id="editName" value="${r.name.replaceAll('"',"&quot;")}"><input class="input" id="editPhoto" type="file" accept="image/*">
+  <div class="inline-2"><input class="input" id="editKcal" type="number" value="${r.kcal}"><input class="input" id="editProtein" type="number" value="${r.protein}"></div>
+  <div class="inline-2"><input class="input" id="editTime" type="number" value="${r.time}"><input class="input" id="editServings" type="number" value="${r.servings}"></div>
+  <textarea id="editIngredients">${r.ingredients.join("\n")}</textarea><textarea id="editSteps">${r.steps}</textarea>
+  <button class="btn full" onclick="saveRecipeEdit('${r.id}')">Uložiť zmeny</button><button class="btn danger full" onclick="removeRecipePhoto('${r.id}')">Odstrániť fotku</button>
+  ${r.id.startsWith("custom_")?`<button class="btn danger full" onclick="deleteRecipe('${r.id}')">Vymazať recept</button>`:""}</div></details>
+  </div></div>`;
+  detail.classList.add("show");
+}
+function closeDetail(){detail.classList.remove("show")}
+function toggleFav(id){recipes=recipes.map(r=>r.id===id?{...r,fav:!r.fav}:r);save();renderAll()}
+function randomRecipe(){const r=recipes[Math.floor(Math.random()*recipes.length)];todayPick.innerHTML=recipeCard(r)}
+function readImage(file){return new Promise(res=>{if(!file)return res(null);const fr=new FileReader();fr.onload=()=>res(fr.result);fr.readAsDataURL(file)})}
+async function addRecipe(){
+  const image=await readImage(newRecipePhoto.files[0]);
+  recipes.push({id:"custom_"+Date.now(),name:newRecipeName.value||"Nový recept",category:newRecipeCategory.value,kcal:+newRecipeKcal.value||0,protein:+newRecipeProtein.value||0,time:+newRecipeTime.value||20,servings:+newRecipeServings.value||1,satiety:+newRecipeSatiety.value||80,desc:newRecipeDesc.value||"",fav:false,image,ingredients:newRecipeIngredients.value.split("\n").filter(Boolean),steps:newRecipeSteps.value||"",plate:[]});
+  save(); document.querySelectorAll("#addScreen input,#addScreen textarea").forEach(x=>{if(x.type!=="number")x.value=""}); toast("Recept uložený"); renderAll();
+}
+async function saveRecipeEdit(id){
+  const img=await readImage(editPhoto.files[0]);
+  recipes=recipes.map(r=>r.id===id?{...r,name:editName.value,kcal:+editKcal.value||r.kcal,protein:+editProtein.value||r.protein,time:+editTime.value||r.time,servings:+editServings.value||r.servings,ingredients:editIngredients.value.split("\n").filter(Boolean),steps:editSteps.value,image:img||r.image}:r);
+  save();renderAll();openRecipe(id);toast("Recept upravený");
+}
+function removeRecipePhoto(id){recipes=recipes.map(r=>r.id===id?{...r,image:null}:r);save();renderAll();openRecipe(id)}
+function deleteRecipe(id){if(!confirm("Vymazať tento recept?"))return;recipes=recipes.filter(r=>r.id!==id);save();closeDetail();renderAll()}
+function addRecipeToPlate(id){
+  const r=recipes.find(x=>x.id===id); if(!r)return;
+  (r.plate||[]).forEach(([name,g])=>addFoodToPlate(name,g,false));
+  save();toast("Recept pridaný do taniera");
+}
+function addRecipeToShop(id){const r=recipes.find(x=>x.id===id);if(!r)return;r.ingredients.forEach(x=>shop.push(x));save();toast("Suroviny pridané do nákupu")}
+function initFoodSuggestions(){foodSuggestions.innerHTML=FOOD_DB.flatMap(f=>[f.name,...f.aliases]).map(n=>`<option value="${n}"></option>`).join("")}
+function autofillFood(){
+  const f=findFood(foodName.value);
+  if(f){foodKcal.value=f.k;foodProtein.value=f.p;foodCarbs.value=f.c;foodFat.value=f.f;foodFiber.value=f.fiber;foodHint.textContent=`Doplnené z databázy: ${f.k} kcal / 100 g.`}
+  else foodHint.textContent="Potravinu nepoznám. Hodnoty môžeš doplniť ručne.";
+}
+function addFoodToPlate(name,grams=0,notify=true){
+  const f=findFood(name); if(!f)return;
+  const found=plate.find(x=>normalize(x.name)===normalize(f.name));
+  if(found)found.grams+=grams;else plate.push({name:f.name,k:f.k,p:f.p,c:f.c,f:f.f,fiber:f.fiber,grams});
+  save();renderPlate();if(notify)toast("Potravina pridaná");
+}
+function addCustomFood(){
+  const name=foodName.value.trim(); const known=findFood(name);
+  const data=known||{name,k:+foodKcal.value,p:+foodProtein.value,c:+foodCarbs.value,f:+foodFat.value,fiber:+foodFiber.value};
+  if(!data.name||!data.k){toast("Doplň názov a kalórie");return}
+  const found=plate.find(x=>normalize(x.name)===normalize(data.name));
+  if(found)found.grams+=0;else plate.push({...data,grams:0});
+  [foodName,foodKcal,foodProtein,foodCarbs,foodFat,foodFiber].forEach(x=>x.value="");save();renderPlate();toast("Potravina pridaná");
+}
+function renderPlate(){
+  plateRows.innerHTML=plate.length?plate.map((x,i)=>`<div class="plate-item"><div><b>${x.name}</b><div class="muted">${x.k} kcal / 100 g</div></div><div class="counter"><button onclick="changeGrams(${i},-10)">−</button><input class="grams-input" value="${x.grams}" onchange="setGrams(${i},this.value)"><button onclick="changeGrams(${i},10)">+</button></div><button class="icon-btn" onclick="removePlateFood(${i})" title="Odstrániť">×</button></div>`).join(""):`<div class="empty">Pridaj prvú potravinu.</div>`;
+  let total={k:0,p:0,c:0,f:0,fiber:0,g:0};plate.forEach(x=>{const m=x.grams/100;total.k+=x.k*m;total.p+=x.p*m;total.c+=x.c*m;total.f+=x.f*m;total.fiber+=(x.fiber||0)*m;total.g+=x.grams});
+  const sat=Math.min(100,Math.round(total.g/8+total.p*1.15+total.fiber*1.5));
+  plateTotal.innerHTML=`${Math.round(total.k)} kcal<br>${Math.round(total.p)} g bielkovín · ${Math.round(total.c)} g sacharidov · ${Math.round(total.f)} g tukov · ${Math.round(total.fiber)} g vlákniny`;
+  plateSatiety.innerHTML=`Index sýtosti: <b>${sat}/100</b>${sat>=85?" · Plný tanier certifikát":""}`;
+}
+function changeGrams(i,d){plate[i].grams=Math.max(0,(+plate[i].grams||0)+d);save();renderPlate()}
+function setGrams(i,v){plate[i].grams=Math.max(0,+String(v).replace(",",".")||0);save();renderPlate()}
+function removePlateFood(i){plate.splice(i,1);save();renderPlate();toast("Potravina odstránená")}
+function clearPlate(){if(!plate.length)return;plate=[];save();renderPlate()}
+function savePlateHistory(){
+  if(!plate.length){toast("Tanier je prázdny");return}
+  history.unshift({id:Date.now(),date:new Date().toLocaleString("sk-SK"),items:structuredClone(plate)});
+  save();renderHistory();toast("Tanier uložený");
+}
+function renderHistory(){
+  historyList.innerHTML=history.length?history.map((h,i)=>`<div class="card history-item"><h3>${h.date}</h3><div class="muted">${h.items.map(x=>`${x.name} ${x.grams} g`).join(" · ")}</div><div class="actions"><button class="btn secondary" onclick="restorePlate(${i})">Načítať</button><button class="btn danger" onclick="deleteHistory(${i})">Vymazať</button></div></div>`).join(""):`<div class="empty">Zatiaľ žiadne uložené taniere.</div>`;
+}
+function restorePlate(i){plate=structuredClone(history[i].items);save();openSpecial("plateScreen");renderPlate()}
+function deleteHistory(i){history.splice(i,1);save();renderHistory()}
+function addShop(){const v=shopInput.value.trim();if(!v)return;shop.push(v);shopInput.value="";save();renderShop()}
+function renderShop(){
+  shoppingList.innerHTML=shop.length?shop.map((x,i)=>`<div class="card shop-item"><input type="checkbox" onchange="this.parentElement.classList.toggle('done')"><span class="shop-name">${x}</span><button class="icon-btn" style="margin-left:auto" onclick="shop.splice(${i},1);save();renderShop()">×</button></div>`).join(""):`<div class="empty">Nákupný zoznam je prázdny.</div>`;
+}
+function renderPlanner(){
+  const days=["Pondelok","Utorok","Streda","Štvrtok","Piatok","Sobota","Nedeľa"];
+  plannerRows.innerHTML=days.map(d=>`<div class="day-row"><label>${d}</label><select onchange="planner['${d}']=this.value;save()"><option value="">— vyber recept —</option>${recipes.map(r=>`<option value="${r.id}" ${planner[d]===r.id?"selected":""}>${r.name}</option>`).join("")}</select></div>`).join("");
+}
+function addPlannerToShop(){
+  Object.values(planner).filter(Boolean).forEach(id=>{const r=recipes.find(x=>x.id===id);if(r)r.ingredients.forEach(i=>shop.push(i))});
+  save();toast("Týždeň pridaný do nákupu");
+}
+function renderChef(){
+  chefResults.innerHTML="";
+  pantryInput.value=pantry.join(", ");
+}
+function chefSuggest(){
+  const ingredients=pantryInput.value.split(",").map(normalize).filter(Boolean);
+  pantry=ingredients; const maxK=+chefMaxKcal.value||9999, minP=+chefMinProtein.value||0;
+  const scored=recipes.map(r=>{const text=normalize(JSON.stringify(r));const score=ingredients.reduce((s,x)=>s+(text.includes(x)?1:0),0);return{r,score}})
+    .filter(x=>x.r.kcal<=maxK&&x.r.protein>=minP&&(ingredients.length===0||x.score>0)).sort((a,b)=>b.score-a.score||b.r.satiety-a.r.satiety).slice(0,6);
+  chefResults.innerHTML=scored.length?scored.map(x=>recipeCard(x.r)).join(""):`<div class="empty">Nenašiel som vhodný recept. Skús menej podmienok.</div>`;save();
+}
+function exportData(){
+  const blob=new Blob([JSON.stringify({version:VERSION,recipes,shop,plate,history,planner,pantry},null,2)],{type:"application/json"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="plny-tanier-zaloha.json";a.click();URL.revokeObjectURL(a.href);
+}
+async function importData(){
+  const file=backupInput.files[0];if(!file)return;try{const d=JSON.parse(await file.text());recipes=mergeRecipes(d.recipes||[]);shop=d.shop||shop;plate=d.plate||plate;history=d.history||history;planner=d.planner||planner;pantry=d.pantry||pantry;save();renderAll();toast("Záloha obnovená")}catch{toast("Neplatný súbor")}
+}
+function renderFoodCards(){foodCards.innerHTML=FOOD_DB.slice(0,16).map(f=>`<div class="card food-card"><b>${f.name}</b><div class="muted">${f.k} kcal · ${f.p} g bielkovín · ${f.fiber} g vlákniny</div></div>`).join("")}
+function renderAll(){renderHome();renderRecipes();renderPlate();renderHistory();renderShop();renderPlanner();renderChef();renderFoodCards();save()}
+window.addEventListener("load",()=>{initFoodSuggestions();renderAll();if("serviceWorker"in navigator)navigator.serviceWorker.register("./sw.js").then(r=>r.update())});
