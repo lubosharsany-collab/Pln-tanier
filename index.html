@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="sk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Plný tanier 7.5</title><meta name="theme-color" content="#22352a"><link rel="manifest" href="manifest.webmanifest"><style>
+<title>Plný tanier 7.6</title><meta name="theme-color" content="#22352a"><link rel="manifest" href="manifest.webmanifest"><style>
 :root{
   --bg:#f2eee7;--surface:#fffdf9;--card:#ffffff;--ink:#1d241f;--muted:#6c756f;
   --green:#22352a;--green-2:#3c5946;--sage:#dfe7dc;--sand:#d6b47b;--line:#e3ddd4;
@@ -78,7 +78,8 @@ button{cursor:pointer}
 <section id="diaryScreen" class="screen"><div class="section-head"><h2>Denný kalorický denník</h2></div>
 <div class="diary-head"><button class="icon-btn" onclick="changeDiaryDay(-1)" title="Predchádzajúci deň">‹</button><input class="input" id="diaryDate" type="date" onchange="renderDiary()"><button class="icon-btn" onclick="changeDiaryDay(1)" title="Nasledujúci deň">›</button></div>
 <div class="diary-total"><strong id="diaryCalories">0 kcal</strong><div id="diaryRemaining">Zostáva 0 kcal</div><div class="diary-progress"><span id="diaryProgress" style="width:0%"></span></div><div class="muted" style="color:#dfe8df" id="diaryMacros">0 g bielkovín · 0 g sacharidov · 0 g tukov</div></div>
-<div class="card"><div class="card-body"><h3>Pridať jedlo</h3><select id="diaryMeal"><option>Raňajky</option><option>Desiata</option><option>Obed</option><option>Olovrant</option><option>Večera</option><option>Iné</option></select><input class="input" id="diaryFoodName" list="foodSuggestions" placeholder="Potravina alebo jedlo" oninput="autofillDiaryFood()"><div class="inline-2"><input class="input" id="diaryGrams" type="number" min="0" step="10" value="100" placeholder="gramy"><input class="input" id="diaryKcal100" type="number" min="0" placeholder="kcal / 100 g"></div><div class="inline-2"><input class="input" id="diaryProtein100" type="number" min="0" placeholder="bielkoviny / 100 g"><input class="input" id="diaryCarbs100" type="number" min="0" placeholder="sacharidy / 100 g"></div><input class="input" id="diaryFat100" type="number" min="0" placeholder="tuky / 100 g" onkeydown="if(event.key==='Enter')addDiaryEntry()"><button class="btn full" onclick="addDiaryEntry()">Pridať do denníka</button></div></div>
+<div class="card"><div class="card-body"><h3>Pridať uložený recept</h3><select id="diaryRecipe" onchange="syncDiaryMealFromRecipe()"><option value="">— vyber recept —</option></select><div class="inline-2"><select id="diaryRecipeMeal"><option>Raňajky</option><option>Desiata</option><option>Obed</option><option>Olovrant</option><option>Večera</option><option>Iné</option></select><button class="btn" onclick="addRecipeToDiary()">Pridať recept</button></div><div class="muted">Do denníka sa automaticky zapíšu všetky suroviny receptu aj ich kalórie a makrá.</div></div></div>
+<div class="card" style="margin-top:12px"><div class="card-body"><h3>Pridať jedlo ručne</h3><select id="diaryMeal"><option>Raňajky</option><option>Desiata</option><option>Obed</option><option>Olovrant</option><option>Večera</option><option>Iné</option></select><input class="input" id="diaryFoodName" list="foodSuggestions" placeholder="Potravina alebo jedlo" oninput="autofillDiaryFood()"><div class="inline-2"><input class="input" id="diaryGrams" type="number" min="0" step="10" value="100" placeholder="gramy"><input class="input" id="diaryKcal100" type="number" min="0" placeholder="kcal / 100 g"></div><div class="inline-2"><input class="input" id="diaryProtein100" type="number" min="0" placeholder="bielkoviny / 100 g"><input class="input" id="diaryCarbs100" type="number" min="0" placeholder="sacharidy / 100 g"></div><input class="input" id="diaryFat100" type="number" min="0" placeholder="tuky / 100 g" onkeydown="if(event.key==='Enter')addDiaryEntry()"><button class="btn full" onclick="addDiaryEntry()">Pridať do denníka</button></div></div>
 <div class="section-head"><h2>Jedlá dňa</h2></div><div id="diaryList"></div>
 <div class="section-head"><h2>Denný cieľ</h2></div><div class="card"><div class="card-body"><div class="target-row"><input class="input" id="diaryTargetInput" type="number" min="500" step="50" placeholder="Denný cieľ kcal"><button class="btn compact" onclick="saveDiaryTarget()">Uložiť</button></div><div class="muted">Cieľ sa používa na výpočet zostávajúcich kalórií.</div></div></div></section>
 
@@ -100,7 +101,7 @@ button{cursor:pointer}
 <button onclick="showScreen('shoppingScreen',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h2l2 10h9l2-7H7"/><circle cx="10" cy="19" r="1"/><circle cx="17" cy="19" r="1"/></svg>Nákup</button>
 </nav>
 <script>const recipesEl=document.getElementById("recipesGrid");</script><script>
-const VERSION="7.5";
+const VERSION="7.6";
 const KEYS={
   recipes:"pt7_recipes",shop:"pt7_shop",plate:"pt7_plate",history:"pt7_history",
   planner:"pt7_planner",pantry:"pt7_pantry",shopDone:"pt7_shop_done",diary:"pt7_diary",diaryTarget:"pt7_diary_target"
@@ -346,6 +347,21 @@ function localDateISO(d=new Date()){const x=new Date(d);x.setMinutes(x.getMinute
 function openDiaryToday(){diaryDate.value=localDateISO();openSpecial("diaryScreen");renderDiary()}
 function changeDiaryDay(delta){const d=new Date((diaryDate.value||localDateISO())+"T12:00:00");d.setDate(d.getDate()+delta);diaryDate.value=localDateISO(d);renderDiary()}
 function autofillDiaryFood(){const f=findFood(diaryFoodName.value);if(!f)return;diaryKcal100.value=f.k;diaryProtein100.value=f.p;diaryCarbs100.value=f.c;diaryFat100.value=f.f}
+function diaryMealForCategory(category){const c=normalize(category);if(c.includes("ranaj"))return "Raňajky";if(c.includes("obed"))return "Obed";if(c.includes("vecer"))return "Večera";if(c.includes("noc"))return "Iné";return "Iné"}
+function syncDiaryMealFromRecipe(){const r=recipes.find(x=>x.id===diaryRecipe.value);if(r)diaryRecipeMeal.value=diaryMealForCategory(r.category)}
+function renderDiaryRecipeOptions(){
+  if(!window.diaryRecipe)return;
+  const current=diaryRecipe.value;
+  diaryRecipe.innerHTML=`<option value="">— vyber recept —</option>${recipes.slice().sort((a,b)=>a.name.localeCompare(b.name,"sk")).map(r=>`<option value="${r.id}">${r.name} · ${r.kcal} kcal</option>`).join("")}`;
+  if(recipes.some(r=>r.id===current))diaryRecipe.value=current;
+}
+function addRecipeToDiary(){
+  const r=recipes.find(x=>x.id===diaryRecipe.value);if(!r){toast("Vyber recept");return}
+  const meal=diaryRecipeMeal.value,date=diaryDate.value||localDateISO(),groupId="recipe_"+Date.now();
+  const parts=(r.plate||[]).map((x,i)=>{const f=findFood(x[0]);return f?{id:Date.now()+i,date,meal,name:x[0],grams:+x[1]||0,kcal100:f.k,protein100:f.p,carbs100:f.c,fat100:f.f,recipeName:r.name,groupId}:null}).filter(Boolean);
+  if(parts.length){diary.push(...parts)}else{diary.push({id:Date.now(),date,meal,name:r.name,grams:1,kcal100:(+r.kcal||0)*100,protein100:(+r.protein||0)*100,carbs100:0,fat100:0,recipeName:r.name,groupId})}
+  save();renderDiary();toast(`${r.name} pridaný do denníka`)
+}
 function addDiaryEntry(){
   const name=diaryFoodName.value.trim(), grams=Math.max(0,+diaryGrams.value||0), kcal100=Math.max(0,+diaryKcal100.value||0);
   if(!name||!grams||!kcal100){toast("Doplň jedlo, gramy a kalórie");return}
@@ -360,7 +376,7 @@ function addPlateToDiary(){
   const date=localDateISO();plate.forEach((x,n)=>diary.push({id:Date.now()+n,date,meal,name:x.name,grams:+x.grams||0,kcal100:+x.k||0,protein100:+x.p||0,carbs100:+x.c||0,fat100:+x.f||0}));save();toast("Tanier zapísaný do dnešného denníka")
 }
 function renderDiary(){
-  if(!diaryDate.value)diaryDate.value=localDateISO();diaryTargetInput.value=diaryTarget;
+  if(!diaryDate.value)diaryDate.value=localDateISO();diaryTargetInput.value=diaryTarget;renderDiaryRecipeOptions();
   const items=diary.filter(x=>x.date===diaryDate.value), meals=["Raňajky","Desiata","Obed","Olovrant","Večera","Iné"];
   let totals={k:0,p:0,c:0,f:0};items.forEach(x=>{const m=x.grams/100;totals.k+=x.kcal100*m;totals.p+=(x.protein100||0)*m;totals.c+=(x.carbs100||0)*m;totals.f+=(x.fat100||0)*m});
   const kcal=Math.round(totals.k), remaining=Math.round(diaryTarget-kcal), percent=Math.min(100,Math.round(kcal/diaryTarget*100));
