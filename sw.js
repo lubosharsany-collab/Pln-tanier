@@ -1,7 +1,7 @@
 {
   "name": "Plný tanier",
   "short_name": "Plný tanier",
-  "start_url": "./index.html?v=7.8",
+  "start_url": "./index.html?v=7.9",
   "display": "standalone",
   "background_color": "#f2eee7",
   "theme_color": "#22352a",
