@@ -51,12 +51,12 @@ button{cursor:pointer}
 @media(min-width:640px){.recipe-grid{grid-template-columns:1fr 1fr}.quick-grid{grid-template-columns:repeat(4,1fr)}}
 </style></head>
 <body><div class="app">
-<header class="topbar"><div class="brand"><div class="brand-logo"><svg viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="23" stroke="#fff7e6" stroke-width="5"/><ellipse cx="31" cy="30" rx="12" ry="15" fill="#d6b47b"/><path d="M25 43c8 5 18 5 26 0" stroke="#fff7e6" stroke-width="4" stroke-linecap="round"/></svg></div><div><h1>Plný tanier</h1><p>Osobný kuchár · v7.9</p></div></div><button class="icon-btn" onclick="exportData()" title="Zálohovať">⇩</button></header>
+<header class="topbar"><div class="brand"><div class="brand-logo"><svg viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="23" stroke="#fff7e6" stroke-width="5"/><ellipse cx="31" cy="30" rx="12" ry="15" fill="#d6b47b"/><path d="M25 43c8 5 18 5 26 0" stroke="#fff7e6" stroke-width="4" stroke-linecap="round"/></svg></div><div><h1>Plný tanier</h1><p>Osobný kuchár · v8.0</p></div></div><button class="icon-btn" onclick="exportData()" title="Zálohovať">⇩</button></header>
 
 <section id="homeScreen" class="screen active">
 <div class="hero"><h2>Jedz normálne. Len múdrejšie.</h2><p>Sýte recepty, rýchla kalkulačka taniera a odporúčania podľa toho, čo máš doma.</p><div class="metrics"><div class="metric"><b id="recipeCount">0</b><span>receptov</span></div><div class="metric"><b id="favCount">0</b><span>obľúbených</span></div><div class="metric"><b id="historyCount">0</b><span>uložených tanierov</span></div></div></div>
 <div class="quick-grid"><button class="quick-card" onclick="randomRecipe()">Čo dnes variť?<small>Náhodný výber</small></button><button class="quick-card" onclick="openSpecial('plateScreen')">Môj tanier<small>Makrá a sýtosť</small></button><button class="quick-card" onclick="openSpecial('chefScreen')">Kuchár radí<small>Podľa surovín</small></button><button class="quick-card" onclick="openSpecial('plannerScreen')">Týždeň<small>Plán jedál</small></button><button class="quick-card" onclick="openDiaryToday()">Denník<small>Kalórie za deň</small></button></div>
-<div id="todayPick"></div><div class="section-head"><h2>Obľúbené ⭐</h2><button onclick="showScreen('recipesScreen',document.querySelectorAll('.nav button')[1])">Všetky</button></div><div class="recipe-grid" id="favList"></div><div class="version">Plný tanier v7.9 · fotografie jedál</div>
+<div id="todayPick"></div><div class="section-head"><h2>Obľúbené ⭐</h2><button onclick="showScreen('recipesScreen',document.querySelectorAll('.nav button')[1])">Všetky</button></div><div class="recipe-grid" id="favList"></div><div class="version">Plný tanier v8.0 · opravené načítanie</div>
 </section>
 
 <section id="recipesScreen" class="screen"><input class="input" id="recipeSearch" placeholder="Hľadať recept alebo surovinu..." oninput="renderRecipes()"><div class="tabs" id="tabs"></div><div class="recipe-grid" id="recipesGrid"></div></section>
@@ -101,7 +101,7 @@ button{cursor:pointer}
 <button onclick="showScreen('shoppingScreen',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h2l2 10h9l2-7H7"/><circle cx="10" cy="19" r="1"/><circle cx="17" cy="19" r="1"/></svg>Nákup</button>
 </nav>
 <script>const recipesEl=document.getElementById("recipesGrid");</script><script>
-const VERSION="7.9";
+const VERSION="8.0";
 const KEYS={
   recipes:"pt7_recipes",shop:"pt7_shop",plate:"pt7_plate",history:"pt7_history",
   planner:"pt7_planner",pantry:"pt7_pantry",shopDone:"pt7_shop_done",diary:"pt7_diary",diaryTarget:"pt7_diary_target"
@@ -184,7 +184,9 @@ function mergeRecipes(existing){
   DEFAULT_RECIPES.forEach(r=>map.set(r.id,{...r}));
   existing.forEach(r=>{
     const match=[...map.values()].find(x=>x.id===r.id||normalize(x.name||x.n)===normalize(r.name||r.n));
-    const normalized={...r,name:r.name||r.n,category:r.category||r.c,kcal:Number(r.kcal)||parseInt(r.k)||0,protein:Number(r.protein)||parseInt(r.p)||0,ingredients:r.ingredients||r.i||[],steps:r.steps||r.s||"",image:r.image||r.img||match?.image||null,time:r.time||20,servings:r.servings||1,satiety:r.satiety||85,desc:r.desc||r.s||""};
+    let storedImage=r.image||r.img||null;
+    if(typeof storedImage!=="string" || storedImage.startsWith("data:image/")) storedImage=null;
+    const normalized={...r,name:r.name||r.n,category:r.category||r.c,kcal:Number(r.kcal)||parseInt(r.k)||0,protein:Number(r.protein)||parseInt(r.p)||0,ingredients:r.ingredients||r.i||[],steps:r.steps||r.s||"",image:storedImage||match?.image||null,time:r.time||20,servings:r.servings||1,satiety:r.satiety||85,desc:r.desc||r.s||""};
     if(match) map.set(match.id,{...match,...normalized,id:match.id});
     else map.set(normalized.id||"custom_"+Date.now()+"_"+Math.random(),normalized);
   });
@@ -208,15 +210,17 @@ let diaryTarget=parse(KEYS.diaryTarget,2000);
 let activeCategory="Všetko";
 
 function save(){
-  localStorage.setItem(KEYS.recipes,JSON.stringify(recipes));
-  localStorage.setItem(KEYS.shop,JSON.stringify(shop));
-  localStorage.setItem(KEYS.plate,JSON.stringify(plate));
-  localStorage.setItem(KEYS.history,JSON.stringify(history));
-  localStorage.setItem(KEYS.planner,JSON.stringify(planner));
-  localStorage.setItem(KEYS.pantry,JSON.stringify(pantry));
-  localStorage.setItem(KEYS.shopDone,JSON.stringify(shopDone));
-  localStorage.setItem(KEYS.diary,JSON.stringify(diary));
-  localStorage.setItem(KEYS.diaryTarget,JSON.stringify(diaryTarget));
+  try{
+    localStorage.setItem(KEYS.recipes,JSON.stringify(recipes));
+    localStorage.setItem(KEYS.shop,JSON.stringify(shop));
+    localStorage.setItem(KEYS.plate,JSON.stringify(plate));
+    localStorage.setItem(KEYS.history,JSON.stringify(history));
+    localStorage.setItem(KEYS.planner,JSON.stringify(planner));
+    localStorage.setItem(KEYS.pantry,JSON.stringify(pantry));
+    localStorage.setItem(KEYS.shopDone,JSON.stringify(shopDone));
+    localStorage.setItem(KEYS.diary,JSON.stringify(diary));
+    localStorage.setItem(KEYS.diaryTarget,JSON.stringify(diaryTarget));
+  }catch(e){console.warn("Uloženie dát zlyhalo:",e)}
 }
 function foodTerms(f){return [f.name,...(f.aliases||[])].map(normalize)}
 function findFood(name){
@@ -455,5 +459,10 @@ async function importData(){
 }
 function renderFoodCards(){foodCards.innerHTML=FOOD_DB.slice(0,16).map(f=>`<div class="card food-card"><b>${f.name}</b><div class="muted">${f.k} kcal · ${f.p} g bielkovín · ${f.fiber} g vlákniny</div></div>`).join("")}
 function renderAll(){renderHome();renderRecipes();renderPlate();renderHistory();renderShop();renderPlanner();renderChef();renderFoodCards();renderDiary();save()}
-window.addEventListener("load",()=>{initFoodSuggestions();renderAll();if("serviceWorker"in navigator)navigator.serviceWorker.register("./sw.js").then(r=>r.update())});
+window.addEventListener("load",async()=>{
+  initFoodSuggestions();renderAll();
+  if("serviceWorker" in navigator){
+    try{const r=await navigator.serviceWorker.register("./sw.js?ver=8.0");await r.update()}catch(e){console.warn("Service worker:",e)}
+  }
+});
 </script></body></html>
