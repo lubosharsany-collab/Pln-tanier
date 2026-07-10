@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="sk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Plný tanier 7.3</title><meta name="theme-color" content="#22352a"><link rel="manifest" href="manifest.webmanifest"><style>
+<title>Plný tanier 7.4</title><meta name="theme-color" content="#22352a"><link rel="manifest" href="manifest.webmanifest"><style>
 :root{
   --bg:#f2eee7;--surface:#fffdf9;--card:#ffffff;--ink:#1d241f;--muted:#6c756f;
   --green:#22352a;--green-2:#3c5946;--sage:#dfe7dc;--sand:#d6b47b;--line:#e3ddd4;
@@ -50,12 +50,12 @@ button{cursor:pointer}
 @media(min-width:640px){.recipe-grid{grid-template-columns:1fr 1fr}.quick-grid{grid-template-columns:repeat(4,1fr)}}
 </style></head>
 <body><div class="app">
-<header class="topbar"><div class="brand"><div class="brand-logo"><svg viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="23" stroke="#fff7e6" stroke-width="5"/><ellipse cx="31" cy="30" rx="12" ry="15" fill="#d6b47b"/><path d="M25 43c8 5 18 5 26 0" stroke="#fff7e6" stroke-width="4" stroke-linecap="round"/></svg></div><div><h1>Plný tanier</h1><p>Osobný kuchár · v7.3</p></div></div><button class="icon-btn" onclick="exportData()" title="Zálohovať">⇩</button></header>
+<header class="topbar"><div class="brand"><div class="brand-logo"><svg viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="23" stroke="#fff7e6" stroke-width="5"/><ellipse cx="31" cy="30" rx="12" ry="15" fill="#d6b47b"/><path d="M25 43c8 5 18 5 26 0" stroke="#fff7e6" stroke-width="4" stroke-linecap="round"/></svg></div><div><h1>Plný tanier</h1><p>Osobný kuchár · v7.4</p></div></div><button class="icon-btn" onclick="exportData()" title="Zálohovať">⇩</button></header>
 
 <section id="homeScreen" class="screen active">
 <div class="hero"><h2>Jedz normálne. Len múdrejšie.</h2><p>Sýte recepty, rýchla kalkulačka taniera a odporúčania podľa toho, čo máš doma.</p><div class="metrics"><div class="metric"><b id="recipeCount">0</b><span>receptov</span></div><div class="metric"><b id="favCount">0</b><span>obľúbených</span></div><div class="metric"><b id="historyCount">0</b><span>uložených tanierov</span></div></div></div>
 <div class="quick-grid"><button class="quick-card" onclick="randomRecipe()">Čo dnes variť?<small>Náhodný výber</small></button><button class="quick-card" onclick="openSpecial('plateScreen')">Môj tanier<small>Makrá a sýtosť</small></button><button class="quick-card" onclick="openSpecial('chefScreen')">Kuchár radí<small>Podľa surovín</small></button><button class="quick-card" onclick="openSpecial('plannerScreen')">Týždeň<small>Plán jedál</small></button></div>
-<div id="todayPick"></div><div class="section-head"><h2>Obľúbené ⭐</h2><button onclick="showScreen('recipesScreen',document.querySelectorAll('.nav button')[1])">Všetky</button></div><div class="recipe-grid" id="favList"></div><div class="version">Plný tanier v7.3 · regresný checklist zapnutý</div>
+<div id="todayPick"></div><div class="section-head"><h2>Obľúbené ⭐</h2><button onclick="showScreen('recipesScreen',document.querySelectorAll('.nav button')[1])">Všetky</button></div><div class="recipe-grid" id="favList"></div><div class="version">Plný tanier v7.4 · regresný checklist zapnutý</div>
 </section>
 
 <section id="recipesScreen" class="screen"><input class="input" id="recipeSearch" placeholder="Hľadať recept alebo surovinu..." oninput="renderRecipes()"><div class="tabs" id="tabs"></div><div class="recipe-grid" id="recipesGrid"></div></section>
@@ -69,18 +69,18 @@ button{cursor:pointer}
 
 <section id="plateScreen" class="screen"><div class="section-head"><h2>Môj tanier</h2><button onclick="clearPlate()">Vyčistiť</button></div>
 <div class="plate-summary"><div class="plate-total" id="plateTotal">0 kcal</div><div class="muted" id="plateSatiety">Index sýtosti: 0/100</div><div class="actions"><button class="btn secondary" onclick="savePlateHistory()">Uložiť tanier</button></div></div>
-<div class="card"><div class="card-body"><h3>Pridať potravinu</h3><div class="grams-add"><input class="input" id="foodName" list="foodSuggestions" placeholder="Začni písať, napr. maliny" oninput="autofillFood()"><input class="input" id="foodGrams" type="number" min="0" step="10" value="100" placeholder="gramy"></div><datalist id="foodSuggestions"></datalist>
+<div class="card"><div class="card-body"><h3>Pridať potravinu</h3><div class="grams-add"><input class="input" id="foodName" list="foodSuggestions" placeholder="Začni písať, napr. maliny" oninput="autofillFood()"><input class="input" id="foodGrams" type="number" min="0" step="10" value="100" placeholder="gramy" onkeydown="if(event.key==='Enter')addCustomFood()"></div><datalist id="foodSuggestions"></datalist>
 <div class="inline-2"><input class="input" id="foodKcal" type="number" placeholder="kcal / 100 g"><input class="input" id="foodProtein" type="number" placeholder="bielkoviny / 100 g"></div>
 <div class="inline-2"><input class="input" id="foodCarbs" type="number" placeholder="sacharidy"><input class="input" id="foodFat" type="number" placeholder="tuky"></div><input class="input" id="foodFiber" type="number" placeholder="vláknina"><div class="muted" id="foodHint">Známe hodnoty sa doplnia automaticky.</div><button class="btn full" onclick="addCustomFood()">Pridať do taniera</button></div></div>
 <div style="margin-top:14px" id="plateRows"></div><div class="section-head"><h2>História tanierov</h2></div><div class="grid" id="historyList"></div></section>
 
-<section id="shoppingScreen" class="screen"><div class="section-head"><h2>Nákup</h2></div><div class="inline"><input class="input" id="shopInput" placeholder="Pridať surovinu"><button class="btn compact" onclick="addShop()">Pridať</button></div><div class="shop-tools"><button class="btn secondary" onclick="clearDoneShop()">Odstrániť kúpené</button><button class="btn danger" onclick="clearShop()">Vymazať celý zoznam</button></div><div class="grid" id="shoppingList"></div>
+<section id="shoppingScreen" class="screen"><div class="section-head"><h2>Nákup</h2><span class="muted" id="shopProgress">0/0 kúpené</span></div><div class="inline"><input class="input" id="shopInput" placeholder="Pridať surovinu" onkeydown="if(event.key==='Enter')addShop()"><button class="btn compact" onclick="addShop()">Pridať</button></div><div class="shop-tools"><button class="btn secondary" onclick="clearDoneShop()">Odstrániť kúpené</button><button class="btn danger" onclick="clearShop()">Vymazať celý zoznam</button></div><div class="grid" id="shoppingList"></div>
 <div class="section-head"><h2>Prehľad potravín</h2></div><div class="food-cards" id="foodCards"></div>
 <div class="section-head"><h2>Záloha dát</h2></div><div class="card"><div class="card-body"><button class="btn full" onclick="exportData()">Stiahnuť zálohu</button><input class="input" id="backupInput" type="file" accept="application/json"><button class="btn secondary full" onclick="importData()">Obnoviť zo zálohy</button></div></div></section>
 
 <section id="chefScreen" class="screen"><div class="section-head"><h2>Kuchár radí</h2></div><div class="card"><div class="card-body"><input class="input" id="pantryInput" placeholder="Čo máš doma? napr. kuracie, bataty, tvaroh"><div class="inline-2"><input class="input" id="chefMaxKcal" type="number" placeholder="Max. kcal"><input class="input" id="chefMinProtein" type="number" placeholder="Min. bielkovín"></div><button class="btn full" onclick="chefSuggest()">Navrhnúť recepty</button></div></div><div class="recipe-grid" style="margin-top:14px" id="chefResults"></div></section>
 
-<section id="plannerScreen" class="screen"><div class="section-head"><h2>Plán jedál</h2></div><div class="card"><div class="card-body" id="plannerRows"></div></div><button class="btn full" onclick="addPlannerToShop()">Pridať týždeň do nákupu</button></section>
+<section id="plannerScreen" class="screen"><div class="section-head"><h2>Plán jedál</h2></div><div class="card"><div class="card-body" id="plannerRows"></div></div><div class="actions"><button class="btn secondary" onclick="randomizePlanner()">Náhodne vyplniť</button><button class="btn danger" onclick="clearPlanner()">Vyčistiť plán</button></div><button class="btn full" onclick="addPlannerToShop()">Pridať týždeň do nákupu</button></section>
 </div>
 
 <div id="detail" class="detail"></div><div id="toastEl" class="toast"></div>
@@ -92,7 +92,7 @@ button{cursor:pointer}
 <button onclick="showScreen('shoppingScreen',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h2l2 10h9l2-7H7"/><circle cx="10" cy="19" r="1"/><circle cx="17" cy="19" r="1"/></svg>Nákup</button>
 </nav>
 <script>const recipesEl=document.getElementById("recipesGrid");</script><script>
-const VERSION="7.3";
+const VERSION="7.4";
 const KEYS={
   recipes:"pt7_recipes",shop:"pt7_shop",plate:"pt7_plate",history:"pt7_history",
   planner:"pt7_planner",pantry:"pt7_pantry",shopDone:"pt7_shop_done"
@@ -332,15 +332,27 @@ function clearDoneShop(){
 function clearShop(){if(!shop.length||!confirm("Vymazať celý nákupný zoznam?"))return;shop=[];shopDone=[];save();renderShop()}
 function renderShop(){
   while(shopDone.length<shop.length)shopDone.push(false);if(shopDone.length>shop.length)shopDone=shopDone.slice(0,shop.length);
+  const doneCount=shopDone.filter(Boolean).length;
+  shopProgress.textContent=`${doneCount}/${shop.length} kúpené`;
   shoppingList.innerHTML=shop.length?shop.map((x,i)=>`<div class="card shop-item ${shopDone[i]?"done":""}"><input type="checkbox" ${shopDone[i]?"checked":""} onchange="toggleShopDone(${i},this.checked)"><span class="shop-name">${x}</span><button class="icon-btn" style="margin-left:auto" onclick="removeShopItem(${i})">×</button></div>`).join(""):`<div class="empty">Nákupný zoznam je prázdny.</div>`;
 }
 function renderPlanner(){
   const days=["Pondelok","Utorok","Streda","Štvrtok","Piatok","Sobota","Nedeľa"];
   plannerRows.innerHTML=days.map(d=>`<div class="day-row"><label>${d}</label><select onchange="planner['${d}']=this.value;save()"><option value="">— vyber recept —</option>${recipes.map(r=>`<option value="${r.id}" ${planner[d]===r.id?"selected":""}>${r.name}</option>`).join("")}</select></div>`).join("");
 }
+function randomizePlanner(){
+  const days=["Pondelok","Utorok","Streda","Štvrtok","Piatok","Sobota","Nedeľa"];
+  if(!recipes.length)return;
+  days.forEach(d=>planner[d]=recipes[Math.floor(Math.random()*recipes.length)].id);
+  save();renderPlanner();toast("Týždeň náhodne vyplnený");
+}
+function clearPlanner(){
+  if(!Object.values(planner).some(Boolean))return;
+  planner={};save();renderPlanner();toast("Plán vyčistený");
+}
 function addPlannerToShop(){
   Object.values(planner).filter(Boolean).forEach(id=>{const r=recipes.find(x=>x.id===id);if(r)r.ingredients.forEach(i=>shop.push(i))});
-  save();toast("Týždeň pridaný do nákupu");
+  save();renderShop();toast("Týždeň pridaný do nákupu");
 }
 function renderChef(){
   chefResults.innerHTML="";
