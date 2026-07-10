@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="sk"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Plný tanier 8.1</title><meta name="theme-color" content="#22352a"><style>
+<title>Plný tanier 7.6</title><meta name="theme-color" content="#22352a"><link rel="manifest" href="manifest.webmanifest"><style>
 :root{
   --bg:#f2eee7;--surface:#fffdf9;--card:#ffffff;--ink:#1d241f;--muted:#6c756f;
   --green:#22352a;--green-2:#3c5946;--sage:#dfe7dc;--sand:#d6b47b;--line:#e3ddd4;
@@ -51,12 +51,12 @@ button{cursor:pointer}
 @media(min-width:640px){.recipe-grid{grid-template-columns:1fr 1fr}.quick-grid{grid-template-columns:repeat(4,1fr)}}
 </style></head>
 <body><div class="app">
-<header class="topbar"><div class="brand"><div class="brand-logo"><svg viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="23" stroke="#fff7e6" stroke-width="5"/><ellipse cx="31" cy="30" rx="12" ry="15" fill="#d6b47b"/><path d="M25 43c8 5 18 5 26 0" stroke="#fff7e6" stroke-width="4" stroke-linecap="round"/></svg></div><div><h1>Plný tanier</h1><p>Osobný kuchár · v8.1</p></div></div><button class="icon-btn" onclick="exportData()" title="Zálohovať">⇩</button></header>
+<header class="topbar"><div class="brand"><div class="brand-logo"><svg viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="23" stroke="#fff7e6" stroke-width="5"/><ellipse cx="31" cy="30" rx="12" ry="15" fill="#d6b47b"/><path d="M25 43c8 5 18 5 26 0" stroke="#fff7e6" stroke-width="4" stroke-linecap="round"/></svg></div><div><h1>Plný tanier</h1><p>Osobný kuchár · v7.7</p></div></div><button class="icon-btn" onclick="exportData()" title="Zálohovať">⇩</button></header>
 
 <section id="homeScreen" class="screen active">
 <div class="hero"><h2>Jedz normálne. Len múdrejšie.</h2><p>Sýte recepty, rýchla kalkulačka taniera a odporúčania podľa toho, čo máš doma.</p><div class="metrics"><div class="metric"><b id="recipeCount">0</b><span>receptov</span></div><div class="metric"><b id="favCount">0</b><span>obľúbených</span></div><div class="metric"><b id="historyCount">0</b><span>uložených tanierov</span></div></div></div>
 <div class="quick-grid"><button class="quick-card" onclick="randomRecipe()">Čo dnes variť?<small>Náhodný výber</small></button><button class="quick-card" onclick="openSpecial('plateScreen')">Môj tanier<small>Makrá a sýtosť</small></button><button class="quick-card" onclick="openSpecial('chefScreen')">Kuchár radí<small>Podľa surovín</small></button><button class="quick-card" onclick="openSpecial('plannerScreen')">Týždeň<small>Plán jedál</small></button><button class="quick-card" onclick="openDiaryToday()">Denník<small>Kalórie za deň</small></button></div>
-<div id="todayPick"></div><div class="section-head"><h2>Obľúbené ⭐</h2><button onclick="showScreen('recipesScreen',document.querySelectorAll('.nav button')[1])">Všetky</button></div><div class="recipe-grid" id="favList"></div><div class="version">Plný tanier v8.0 · opravené načítanie</div>
+<div id="todayPick"></div><div class="section-head"><h2>Obľúbené ⭐</h2><button onclick="showScreen('recipesScreen',document.querySelectorAll('.nav button')[1])">Všetky</button></div><div class="recipe-grid" id="favList"></div><div class="version">Plný tanier v8.2 · fotografie receptov</div>
 </section>
 
 <section id="recipesScreen" class="screen"><input class="input" id="recipeSearch" placeholder="Hľadať recept alebo surovinu..." oninput="renderRecipes()"><div class="tabs" id="tabs"></div><div class="recipe-grid" id="recipesGrid"></div></section>
@@ -101,7 +101,7 @@ button{cursor:pointer}
 <button onclick="showScreen('shoppingScreen',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h2l2 10h9l2-7H7"/><circle cx="10" cy="19" r="1"/><circle cx="17" cy="19" r="1"/></svg>Nákup</button>
 </nav>
 <script>const recipesEl=document.getElementById("recipesGrid");</script><script>
-const VERSION="8.1";
+const VERSION="8.2";
 const KEYS={
   recipes:"pt7_recipes",shop:"pt7_shop",plate:"pt7_plate",history:"pt7_history",
   planner:"pt7_planner",pantry:"pt7_pantry",shopDone:"pt7_shop_done",diary:"pt7_diary",diaryTarget:"pt7_diary_target"
@@ -109,20 +109,20 @@ const KEYS={
 
 const DEFAULT_RECIPES=[
 {id:"r_tvaroh",image:"images/tvarohova-klasika.jpg",name:"Tvarohová klasika",category:"Raňajky",kcal:636,protein:54,time:5,servings:1,satiety:94,desc:"Husté raňajky s tvarohom, kefírom, vločkami a ovocím.",fav:true,ingredients:["250 g tvarohu","250 ml kefíru","30 g ovsených vločiek","15 g chia","10 g orechov","80 g ovocia"],steps:"Všetko premiešaj a nechaj pár minút postáť.",plate:[["tvaroh",250],["kefír",250],["ovsené vločky",30],["chia",15],["vlašské orechy",10],["maliny",80]]},
-{id:"r_kura_zemiaky",image:"images/kuracie-ryza.jpg",name:"Kura, zemiaky a kapusta",category:"Večera",kcal:652,protein:63,time:35,servings:1,satiety:97,desc:"Veľký tanier s vysokým obsahom bielkovín a veľmi dobrou sýtosťou.",fav:true,ingredients:["250 g kuracích pŕs","350 g zemiakov","200 g kyslej kapusty","korenie a cesnak"],steps:"Kura a zemiaky upeč. Kapustu podávaj bokom.",plate:[["kuracie prsia",250],["zemiaky",350],["kyslá kapusta",200]]},
-{id:"r_lusky",image:"images/losos-zelenina.jpg",name:"Pečené lusky",category:"Večera",kcal:148,protein:8,time:25,servings:1,satiety:78,desc:"Celý plech zelených fazuliek ako objemná príloha alebo ľahká večera.",fav:true,ingredients:["450 g zelených fazuliek","cesnak","údená paprika","soľ a korenie","5 g oleja"],steps:"Peč 20–25 minút pri 200 °C. V polovici premiešaj.",plate:[["zelené fazuľky",450],["olej",5]]},
-{id:"r_dip",image:"images/chia-puding.jpg",name:"Tvarohový cesnakový dip",category:"Dip",kcal:290,protein:31,time:5,servings:2,satiety:82,desc:"Hustý dip k zemiakom, mäsu alebo zelenine.",fav:false,ingredients:["250 g tvarohu","30 ml kefíru","cesnak","pažítka alebo kôpor"],steps:"Všetko vymiešaj dohladka.",plate:[["tvaroh",250],["kefír",30]]},
-{id:"r_noc",image:"images/proteinovy-shake.jpg",name:"Nočná rezerva",category:"Nočný hlad",kcal:265,protein:30,time:2,servings:1,satiety:86,desc:"Pripravená bezpečná voľba, keď sa zobudíš hladný.",fav:true,ingredients:["250 g tvarohu alebo 500 ml kefíru","prípadne 250 g zemiakov"],steps:"Vyber jednu pripravenú možnosť. Bez výčitiek a bez pečiva.",plate:[["tvaroh",250]]},
-{id:"r_vajcia",image:"images/avokadovy-toast.jpg",name:"Tri vajcia so zemiakmi",category:"Obed",kcal:478,protein:25,time:20,servings:1,satiety:91,desc:"Jednoduchý obed, ktorý zasýti viac než vajcia len so zeleninou.",fav:true,ingredients:["3 vajcia","250 g zemiakov","paradajky alebo uhorka"],steps:"Zemiaky uvar alebo upeč. Vajcia priprav podľa chuti.",plate:[["vajcia",150],["zemiaky",250],["paradajky",150]]},
-{id:"r_zemiaky_tvaroh",image:"images/tvarohova-klasika.jpg",name:"Zemiaky s tvarohom",category:"Večera",kcal:632,protein:42,time:25,servings:1,satiety:96,desc:"Slovenská klasika upravená na sýte jedlo s vysokým obsahom bielkovín.",fav:false,ingredients:["450 g zemiakov","250 g tvarohu","cesnak","kôpor alebo pažítka","150 g kyslej kapusty"],steps:"Zemiaky uvar alebo upeč. Tvaroh ochuť cesnakom a bylinkami.",plate:[["zemiaky",450],["tvaroh",250],["kyslá kapusta",150]]},
-{id:"r_tekvica",image:"images/cestoviny-kuracie.jpg",name:"Tekvicový prívarok",category:"Víkend",kcal:420,protein:28,time:35,servings:2,satiety:88,desc:"Veľký objem, jemná chuť a pri správnej prílohe veľmi sýte jedlo.",fav:false,ingredients:["700 g tekvice","cibuľa","cesnak","kôpor","150 g bieleho jogurtu","2 vajcia"],steps:"Tekvicu podus, dochuť a zahusti malým zemiakom alebo trochou múky.",plate:[["tekvica",700],["biely jogurt",150],["vajcia",100]]},
-{id:"r_nakyp",image:"images/chia-puding.jpg",name:"Kapustovo-zemiakový nákyp",category:"Víkend",kcal:385,protein:20,time:50,servings:3,satiety:90,desc:"Jednoduchý pekáč z dostupných surovín.",fav:false,ingredients:["350 g kyslej kapusty","400 g zemiakov","3 vajcia","40 g ovsených vločiek"],steps:"Všetko zmiešaj a peč 35–45 minút pri 190 °C.",plate:[["kyslá kapusta",350],["zemiaky",400],["vajcia",150],["ovsené vločky",40]]},
-{id:"r_kura_lusky",image:"images/kuracie-ryza.jpg",name:"Kuracie so zemiakmi a fazuľkami",category:"Večera",kcal:647,protein:58,time:35,servings:1,satiety:98,desc:"Overené Ľubošom: obrovský tanier, ktorý sa ledva dá dojesť.",fav:true,ingredients:["200 g kuracích pŕs","350 g zemiakov","220 g zelených fazuliek","paprika, cesnak, soľ, korenie","5 g oleja"],steps:"Všetko ochuť a upeč. Fazuľky pridaj podľa toho, ako chrumkavé ich chceš.",plate:[["kuracie prsia",200],["zemiaky",350],["zelené fazuľky",220],["olej",5]]},
-{id:"r_bataty",image:"images/losos-zelenina.jpg",name:"Kuracie s batatmi",category:"Večera",kcal:655,protein:58,time:35,servings:1,satiety:92,desc:"Sladšia zmena oproti zemiakom, stále s vysokou sýtosťou.",fav:false,ingredients:["220 g kuracích pŕs","300 g batatov","200 g luskov","korenie a cesnak"],steps:"Batat nakrájaj, ochuť a upeč spolu s kuracím mäsom.",plate:[["kuracie prsia",220],["bataty",300],["zelené fazuľky",200]]},
-{id:"r_slany_tvaroh",image:"images/tvarohova-klasika.jpg",name:"Slaný tvaroh so zemiakmi",category:"Večera",kcal:566,protein:39,time:20,servings:1,satiety:95,desc:"Rýchla bezmäsitá večera, keď nechceš variť kura.",fav:false,ingredients:["250 g tvarohu","400 g zemiakov","uhorka","cesnak","pažítka"],steps:"Tvaroh ochuť a podávaj s teplými alebo studenými zemiakmi.",plate:[["tvaroh",250],["zemiaky",400],["uhorka",150]]},
-{id:"r_dedinska_panvica",image:"images/avokadovy-toast.jpg",name:"Dedinská panvica",category:"Obed",kcal:540,protein:27,time:30,servings:1,satiety:93,desc:"Zemiaky, vajcia a kapusta z jednej panvice.",fav:false,ingredients:["350 g zemiakov","3 vajcia","200 g kapusty","cibuľa"],steps:"Zemiaky opeč, pridaj kapustu a nakoniec vajcia.",plate:[["zemiaky",350],["vajcia",150],["kapusta",200],["cibuľa",50]]},
-{id:"r_tvaroh_cheese",image:"images/chia-puding.jpg",name:"Slaný zemiakovo-tvarohový koláč",category:"Víkend",kcal:410,protein:28,time:55,servings:4,satiety:89,desc:"Náš zemiakový cheesecake – slaný, jednoduchý a sýty.",fav:false,ingredients:["500 g zemiakov","500 g tvarohu","3 vajcia","cesnak","pažítka"],steps:"Rozmixuj, nalej do formy a peč približne 40 minút pri 185 °C.",plate:[["zemiaky",500],["tvaroh",500],["vajcia",150]]},
-{id:"r_kapustovy_pekac",image:"images/tortilla-kuracie.jpg",name:"Kapustový pekáč s tvarohom",category:"Víkend",kcal:505,protein:42,time:45,servings:2,satiety:93,desc:"Kapustová verzia zapekaného jedla bez cestovín.",fav:false,ingredients:["500 g kyslej kapusty","3 vajcia","250 g tvarohu","rasca a cesnak"],steps:"Zmiešaj, vlož do pekáča a peč približne 35 minút.",plate:[["kyslá kapusta",500],["vajcia",150],["tvaroh",250]]}
+{id:"r_kura_zemiaky",image:"images/kura-zemiaky-kapusta.jpg",name:"Kura, zemiaky a kapusta",category:"Večera",kcal:652,protein:63,time:35,servings:1,satiety:97,desc:"Veľký tanier s vysokým obsahom bielkovín a veľmi dobrou sýtosťou.",fav:true,ingredients:["250 g kuracích pŕs","350 g zemiakov","200 g kyslej kapusty","korenie a cesnak"],steps:"Kura a zemiaky upeč. Kapustu podávaj bokom.",plate:[["kuracie prsia",250],["zemiaky",350],["kyslá kapusta",200]]},
+{id:"r_lusky",image:"images/pecene-lusky.jpg",name:"Pečené lusky",category:"Večera",kcal:148,protein:8,time:25,servings:1,satiety:78,desc:"Celý plech zelených fazuliek ako objemná príloha alebo ľahká večera.",fav:true,ingredients:["450 g zelených fazuliek","cesnak","údená paprika","soľ a korenie","5 g oleja"],steps:"Peč 20–25 minút pri 200 °C. V polovici premiešaj.",plate:[["zelené fazuľky",450],["olej",5]]},
+{id:"r_dip",image:"images/tvarohovy-dip.jpg",name:"Tvarohový cesnakový dip",category:"Dip",kcal:290,protein:31,time:5,servings:2,satiety:82,desc:"Hustý dip k zemiakom, mäsu alebo zelenine.",fav:false,ingredients:["250 g tvarohu","30 ml kefíru","cesnak","pažítka alebo kôpor"],steps:"Všetko vymiešaj dohladka.",plate:[["tvaroh",250],["kefír",30]]},
+{id:"r_noc",image:"images/nocna-rezerva.jpg",name:"Nočná rezerva",category:"Nočný hlad",kcal:265,protein:30,time:2,servings:1,satiety:86,desc:"Pripravená bezpečná voľba, keď sa zobudíš hladný.",fav:true,ingredients:["250 g tvarohu alebo 500 ml kefíru","prípadne 250 g zemiakov"],steps:"Vyber jednu pripravenú možnosť. Bez výčitiek a bez pečiva.",plate:[["tvaroh",250]]},
+{id:"r_vajcia",image:"images/vajcia-so-zemiakmi.jpg",name:"Tri vajcia so zemiakmi",category:"Obed",kcal:478,protein:25,time:20,servings:1,satiety:91,desc:"Jednoduchý obed, ktorý zasýti viac než vajcia len so zeleninou.",fav:true,ingredients:["3 vajcia","250 g zemiakov","paradajky alebo uhorka"],steps:"Zemiaky uvar alebo upeč. Vajcia priprav podľa chuti.",plate:[["vajcia",150],["zemiaky",250],["paradajky",150]]},
+{id:"r_zemiaky_tvaroh",image:"images/zemiaky-s-tvarohom.jpg",name:"Zemiaky s tvarohom",category:"Večera",kcal:632,protein:42,time:25,servings:1,satiety:96,desc:"Slovenská klasika upravená na sýte jedlo s vysokým obsahom bielkovín.",fav:false,ingredients:["450 g zemiakov","250 g tvarohu","cesnak","kôpor alebo pažítka","150 g kyslej kapusty"],steps:"Zemiaky uvar alebo upeč. Tvaroh ochuť cesnakom a bylinkami.",plate:[["zemiaky",450],["tvaroh",250],["kyslá kapusta",150]]},
+{id:"r_tekvica",image:"images/tekvicovy-privarok.jpg",name:"Tekvicový prívarok",category:"Víkend",kcal:420,protein:28,time:35,servings:2,satiety:88,desc:"Veľký objem, jemná chuť a pri správnej prílohe veľmi sýte jedlo.",fav:false,ingredients:["700 g tekvice","cibuľa","cesnak","kôpor","150 g bieleho jogurtu","2 vajcia"],steps:"Tekvicu podus, dochuť a zahusti malým zemiakom alebo trochou múky.",plate:[["tekvica",700],["biely jogurt",150],["vajcia",100]]},
+{id:"r_nakyp",image:"images/kapustovo-zemiakovy-nakyp.jpg",name:"Kapustovo-zemiakový nákyp",category:"Víkend",kcal:385,protein:20,time:50,servings:3,satiety:90,desc:"Jednoduchý pekáč z dostupných surovín.",fav:false,ingredients:["350 g kyslej kapusty","400 g zemiakov","3 vajcia","40 g ovsených vločiek"],steps:"Všetko zmiešaj a peč 35–45 minút pri 190 °C.",plate:[["kyslá kapusta",350],["zemiaky",400],["vajcia",150],["ovsené vločky",40]]},
+{id:"r_kura_lusky",image:"images/kuracie-zemiaky-fazulky.jpg",name:"Kuracie so zemiakmi a fazuľkami",category:"Večera",kcal:647,protein:58,time:35,servings:1,satiety:98,desc:"Overené Ľubošom: obrovský tanier, ktorý sa ledva dá dojesť.",fav:true,ingredients:["200 g kuracích pŕs","350 g zemiakov","220 g zelených fazuliek","paprika, cesnak, soľ, korenie","5 g oleja"],steps:"Všetko ochuť a upeč. Fazuľky pridaj podľa toho, ako chrumkavé ich chceš.",plate:[["kuracie prsia",200],["zemiaky",350],["zelené fazuľky",220],["olej",5]]},
+{id:"r_bataty",image:"images/kuracie-s-batatmi.jpg",name:"Kuracie s batatmi",category:"Večera",kcal:655,protein:58,time:35,servings:1,satiety:92,desc:"Sladšia zmena oproti zemiakom, stále s vysokou sýtosťou.",fav:false,ingredients:["220 g kuracích pŕs","300 g batatov","200 g luskov","korenie a cesnak"],steps:"Batat nakrájaj, ochuť a upeč spolu s kuracím mäsom.",plate:[["kuracie prsia",220],["bataty",300],["zelené fazuľky",200]]},
+{id:"r_slany_tvaroh",image:"images/slany-tvaroh-zemiaky.jpg",name:"Slaný tvaroh so zemiakmi",category:"Večera",kcal:566,protein:39,time:20,servings:1,satiety:95,desc:"Rýchla bezmäsitá večera, keď nechceš variť kura.",fav:false,ingredients:["250 g tvarohu","400 g zemiakov","uhorka","cesnak","pažítka"],steps:"Tvaroh ochuť a podávaj s teplými alebo studenými zemiakmi.",plate:[["tvaroh",250],["zemiaky",400],["uhorka",150]]},
+{id:"r_dedinska_panvica",image:"images/dedinska-panvica.jpg",name:"Dedinská panvica",category:"Obed",kcal:540,protein:27,time:30,servings:1,satiety:93,desc:"Zemiaky, vajcia a kapusta z jednej panvice.",fav:false,ingredients:["350 g zemiakov","3 vajcia","200 g kapusty","cibuľa"],steps:"Zemiaky opeč, pridaj kapustu a nakoniec vajcia.",plate:[["zemiaky",350],["vajcia",150],["kapusta",200],["cibuľa",50]]},
+{id:"r_tvaroh_cheese",image:"images/zemiakovo-tvarohovy-kolac.jpg",name:"Slaný zemiakovo-tvarohový koláč",category:"Víkend",kcal:410,protein:28,time:55,servings:4,satiety:89,desc:"Náš zemiakový cheesecake – slaný, jednoduchý a sýty.",fav:false,ingredients:["500 g zemiakov","500 g tvarohu","3 vajcia","cesnak","pažítka"],steps:"Rozmixuj, nalej do formy a peč približne 40 minút pri 185 °C.",plate:[["zemiaky",500],["tvaroh",500],["vajcia",150]]},
+{id:"r_kapustovy_pekac",image:"images/kapustovy-pekac.jpg",name:"Kapustový pekáč s tvarohom",category:"Víkend",kcal:505,protein:42,time:45,servings:2,satiety:93,desc:"Kapustová verzia zapekaného jedla bez cestovín.",fav:false,ingredients:["500 g kyslej kapusty","3 vajcia","250 g tvarohu","rasca a cesnak"],steps:"Zmiešaj, vlož do pekáča a peč približne 35 minút.",plate:[["kyslá kapusta",500],["vajcia",150],["tvaroh",250]]}
 ];
 
 const FOOD_DB=[
@@ -184,11 +184,12 @@ function mergeRecipes(existing){
   DEFAULT_RECIPES.forEach(r=>map.set(r.id,{...r}));
   existing.forEach(r=>{
     const match=[...map.values()].find(x=>x.id===r.id||normalize(x.name||x.n)===normalize(r.name||r.n));
-    let storedImage=r.image||r.img||null;
-    if(typeof storedImage!=="string" || storedImage.startsWith("data:image/")) storedImage=null;
-    const normalized={...r,name:r.name||r.n,category:r.category||r.c,kcal:Number(r.kcal)||parseInt(r.k)||0,protein:Number(r.protein)||parseInt(r.p)||0,ingredients:r.ingredients||r.i||[],steps:r.steps||r.s||"",image:storedImage||match?.image||null,time:r.time||20,servings:r.servings||1,satiety:r.satiety||85,desc:r.desc||r.s||""};
-    if(match) map.set(match.id,{...match,...normalized,id:match.id});
-    else map.set(normalized.id||"custom_"+Date.now()+"_"+Math.random(),normalized);
+    const normalized={...r,name:r.name||r.n,category:r.category||r.c,kcal:Number(r.kcal)||parseInt(r.k)||0,protein:Number(r.protein)||parseInt(r.p)||0,ingredients:r.ingredients||r.i||[],steps:r.steps||r.s||"",image:r.image||r.img||null,time:r.time||20,servings:r.servings||1,satiety:r.satiety||85,desc:r.desc||r.s||""};
+    if(match){
+      const merged={...match,...normalized,id:match.id};
+      if(!r.image || (typeof r.image==="string" && r.image.startsWith("data:image/"))) merged.image=match.image;
+      map.set(match.id,merged);
+    } else map.set(normalized.id||"custom_"+Date.now()+"_"+Math.random(),normalized);
   });
   return [...map.values()];
 }
@@ -210,17 +211,15 @@ let diaryTarget=parse(KEYS.diaryTarget,2000);
 let activeCategory="Všetko";
 
 function save(){
-  try{
-    localStorage.setItem(KEYS.recipes,JSON.stringify(recipes));
-    localStorage.setItem(KEYS.shop,JSON.stringify(shop));
-    localStorage.setItem(KEYS.plate,JSON.stringify(plate));
-    localStorage.setItem(KEYS.history,JSON.stringify(history));
-    localStorage.setItem(KEYS.planner,JSON.stringify(planner));
-    localStorage.setItem(KEYS.pantry,JSON.stringify(pantry));
-    localStorage.setItem(KEYS.shopDone,JSON.stringify(shopDone));
-    localStorage.setItem(KEYS.diary,JSON.stringify(diary));
-    localStorage.setItem(KEYS.diaryTarget,JSON.stringify(diaryTarget));
-  }catch(e){console.warn("Uloženie dát zlyhalo:",e)}
+  localStorage.setItem(KEYS.recipes,JSON.stringify(recipes));
+  localStorage.setItem(KEYS.shop,JSON.stringify(shop));
+  localStorage.setItem(KEYS.plate,JSON.stringify(plate));
+  localStorage.setItem(KEYS.history,JSON.stringify(history));
+  localStorage.setItem(KEYS.planner,JSON.stringify(planner));
+  localStorage.setItem(KEYS.pantry,JSON.stringify(pantry));
+  localStorage.setItem(KEYS.shopDone,JSON.stringify(shopDone));
+  localStorage.setItem(KEYS.diary,JSON.stringify(diary));
+  localStorage.setItem(KEYS.diaryTarget,JSON.stringify(diaryTarget));
 }
 function foodTerms(f){return [f.name,...(f.aliases||[])].map(normalize)}
 function findFood(name){
@@ -459,23 +458,5 @@ async function importData(){
 }
 function renderFoodCards(){foodCards.innerHTML=FOOD_DB.slice(0,16).map(f=>`<div class="card food-card"><b>${f.name}</b><div class="muted">${f.k} kcal · ${f.p} g bielkovín · ${f.fiber} g vlákniny</div></div>`).join("")}
 function renderAll(){renderHome();renderRecipes();renderPlate();renderHistory();renderShop();renderPlanner();renderChef();renderFoodCards();renderDiary();save()}
-window.addEventListener("load",async()=>{
-  try{
-    if("serviceWorker" in navigator){
-      const regs=await navigator.serviceWorker.getRegistrations();
-      await Promise.all(regs.map(r=>r.unregister()));
-    }
-    if("caches" in window){
-      const names=await caches.keys();
-      await Promise.all(names.map(n=>caches.delete(n)));
-    }
-  }catch(e){console.warn("Čistenie starej cache:",e)}
-  try{
-    initFoodSuggestions();
-    renderAll();
-  }catch(e){
-    console.error(e);
-    document.body.innerHTML=`<main style="max-width:680px;margin:40px auto;padding:24px;font-family:system-ui"><h1>Plný tanier</h1><p>Aplikáciu sa nepodarilo spustiť.</p><pre style="white-space:pre-wrap;background:#fff;padding:14px;border-radius:12px">${String(e)}</pre><button onclick="localStorage.clear();location.reload()" style="padding:12px 16px;border:0;border-radius:12px;background:#22352a;color:white;font-weight:700">Vyčistiť údaje a skúsiť znova</button></main>`;
-  }
-});
+window.addEventListener("load",()=>{initFoodSuggestions();renderAll();if("serviceWorker"in navigator)navigator.serviceWorker.register("./sw.js").then(r=>r.update())});
 </script></body></html>

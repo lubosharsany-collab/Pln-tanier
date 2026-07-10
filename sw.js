@@ -1,1 +1,16 @@
-Nahraj celý obsah ZIP-u. Potom otvor priamo index.html v prehliadači. Starú nainštalovanú aplikáciu/ikonu z plochy odstráň a až potom ju prípadne nainštaluj znova.
+{
+  "name": "Plný tanier",
+  "short_name": "Plný tanier",
+  "start_url": "./index.html?v=7.6",
+  "display": "standalone",
+  "background_color": "#f2eee7",
+  "theme_color": "#22352a",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
