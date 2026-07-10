@@ -1,0 +1,1 @@
+Rozbaľ ZIP a otvor súbor index.html. Fotografie sú vložené priamo v aplikácii.
